@@ -1,0 +1,66 @@
+{% extends 'accounts/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="profile-header">
+    {% if user.profile.profile_picture %}
+        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+    {% else %}
+        <img src="{% static 'accounts/images/default-avatar.png' %}" alt="Profile Picture" class="profile-picture" onerror="this.style.display='none'">
+    {% endif %}
+    <h2 class="profile-username">{{ user.username }}</h2>
+    <p class="profile-email">{{ user.email }}</p>
+</div>
+
+<div class="profile-info">
+    <h3 style="margin-bottom: 20px; color: #333;">Profile Information</h3>
+    
+    <div class="info-row">
+        <span class="info-label">Username:</span>
+        <span class="info-value">{{ user.username }}</span>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">Email:</span>
+        <span class="info-value">{{ user.email }}</span>
+    </div>
+    
+    <div class="info-row">
+        <span class="info-label">Date Joined:</span>
+        <span class="info-value">{{ user.date_joined|date:"F d, Y" }}</span>
+    </div>
+    
+    {% if user.profile.bio %}
+    <div class="info-row">
+        <span class="info-label">Bio:</span>
+        <span class="info-value">{{ user.profile.bio }}</span>
+    </div>
+    {% endif %}
+    
+    {% if user.profile.gender %}
+    <div class="info-row">
+        <span class="info-label">Gender:</span>
+        <span class="info-value">{{ user.profile.get_gender_display }}</span>
+    </div>
+    {% endif %}
+    
+    {% if user.profile.address_line1 %}
+    <div class="info-row">
+        <span class="info-label">Address:</span>
+        <span class="info-value">
+            {{ user.profile.address_line1 }}
+            {% if user.profile.address_line2 %}, {{ user.profile.address_line2 }}{% endif %}
+            <br>
+            {{ user.profile.city }}{% if user.profile.state %}, {{ user.profile.state }}{% endif %} {{ user.profile.postal_code }}
+            <br>
+            {{ user.profile.country }}
+        </span>
+    </div>
+    {% endif %}
+</div>
+
+<div style="display: flex; gap: 10px; margin-top: 20px;">
+    <a href="#" class="btn btn-primary" style="flex: 1;">Edit Profile</a>
+    <a href="{% url 'accounts:logout' %}" class="btn btn-secondary" style="flex: 1;">Logout</a>
+</div>
+{% endblock %}
