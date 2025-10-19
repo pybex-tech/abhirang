@@ -1,0 +1,318 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MyStore - Fashion & Clothing{% endblock %}</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    {% block extra_css %}{% endblock %}
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #fff;
+        }
+        
+        /* Navigation Bar */
+        .navbar {
+            background-color: #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ff3f6c;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 600;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: #ff3f6c;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+        
+        .search-box {
+            position: relative;
+        }
+        
+        .search-box input {
+            padding: 10px 40px 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            width: 300px;
+            font-size: 14px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #888;
+        }
+        
+        .nav-icon {
+            font-size: 20px;
+            color: #333;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .nav-icon:hover {
+            color: #ff3f6c;
+        }
+        
+        /* Main Content */
+        .main-content {
+            min-height: calc(100vh - 200px);
+        }
+        
+        /* Footer */
+        .footer {
+            background-color: #282c3f;
+            color: #fff;
+            padding: 50px 0 20px;
+            margin-top: 80px;
+        }
+        
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-section h3 {
+            margin-bottom: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .footer-section ul {
+            list-style: none;
+        }
+        
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-section a {
+            color: #94969f;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s;
+        }
+        
+        .footer-section a:hover {
+            color: #fff;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid #40444f;
+            padding-top: 20px;
+            text-align: center;
+            color: #94969f;
+            font-size: 14px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #3e4152;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+        
+        .social-icon:hover {
+            background-color: #ff3f6c;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+            
+            .search-box input {
+                width: 200px;
+            }
+            
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'core:home' %}" class="logo">MyStore</a>
+            
+            <ul class="nav-links">
+                <li><a href="#">Men</a></li>
+                <li><a href="#">Women</a></li>
+                <li><a href="#">Kids</a></li>
+                <li><a href="#">Home & Living</a></li>
+                <li><a href="#">Beauty</a></li>
+            </ul>
+            
+            <div class="nav-actions">
+                <div class="search-box">
+                    <input type="text" placeholder="Search for products, brands and more">
+                    <i class="fas fa-search"></i>
+                </div>
+                
+                {% if user.is_authenticated %}
+                    <a href="{% url 'accounts:profile' %}">
+                        <i class="fas fa-user nav-icon"></i>
+                    </a>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}">
+                        <i class="fas fa-user nav-icon"></i>
+                    </a>
+                {% endif %}
+                
+                <i class="fas fa-heart nav-icon"></i>
+                <i class="fas fa-shopping-bag nav-icon"></i>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- Main Content -->
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Online Shopping</h3>
+                    <ul>
+                        <li><a href="#">Men</a></li>
+                        <li><a href="#">Women</a></li>
+                        <li><a href="#">Kids</a></li>
+                        <li><a href="#">Home & Living</a></li>
+                        <li><a href="#">Beauty</a></li>
+                        <li><a href="#">Gift Cards</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Customer Policies</h3>
+                    <ul>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">T&C</a></li>
+                        <li><a href="#">Terms Of Use</a></li>
+                        <li><a href="#">Track Orders</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Cancellation</a></li>
+                        <li><a href="#">Returns</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Useful Links</h3>
+                    <ul>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Site Map</a></li>
+                        <li><a href="#">Corporate Information</a></li>
+                        <li><a href="#">Whitehat</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Keep In Touch</h3>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 MyStore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

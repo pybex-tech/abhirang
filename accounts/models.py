@@ -21,7 +21,7 @@ class Profile(models.Model):
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True, null=True)
     address_line1 = models.CharField(max_length=255, blank=True)
     address_line2 = models.CharField(max_length=255, blank=True)
-    city = models.CharField(max_length=100, blank=True)
+    city = models.CharField(max_length=100, blank=True, null=True)
     state = models.CharField(max_length=100, blank=True)
     postal_code = models.CharField(max_length=20, blank=True)
     country = models.CharField(max_length=100, blank=True)
