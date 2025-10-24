@@ -9,7 +9,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -24,19 +24,25 @@
         }
         
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             line-height: 1.6;
-            color: #333;
-            background-color: #fff;
+            color: #fff;
+            background-color: #0a0a0a;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Syne', sans-serif;
         }
         
         /* Navigation Bar */
         .navbar {
-            background-color: #fff;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, rgba(10, 10, 10, 0.95) 0%, rgba(15, 25, 35, 0.95) 50%, rgba(26, 31, 46, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(125, 211, 252, 0.2);
             position: sticky;
             top: 0;
             z-index: 1000;
+            box-shadow: 0 4px 30px rgba(144, 238, 144, 0.15);
         }
         
         .nav-container {
@@ -46,15 +52,34 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: 70px;
+            height: 90px;
         }
         
         .logo {
             font-size: 28px;
             font-weight: 800;
-            color: #ff3f6c;
+            font-family: 'Syne', sans-serif;
+            background: linear-gradient(135deg, #90ee90 0%, #7dd3fc 25%, #ff9d5c 50%, #ff66b3 75%, #9370db 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
             text-decoration: none;
             letter-spacing: -1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-image {
+            height: 70px;
+            width: auto;
+            filter: drop-shadow(0 0 15px rgba(125, 211, 252, 0.5));
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover .logo-image {
+            transform: scale(1.05) rotate(-5deg);
+            filter: drop-shadow(0 0 20px rgba(144, 238, 144, 0.6));
         }
         
         .nav-links {
@@ -66,16 +91,31 @@
         
         .nav-links a {
             text-decoration: none;
-            color: #333;
+            color: #b4bcd0;
             font-weight: 600;
             font-size: 14px;
-            text-transform: uppercase;
             letter-spacing: 0.5px;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            position: relative;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #90ee90 0%, #7dd3fc 50%, #ff66b3 100%);
+            transition: width 0.3s ease;
         }
         
         .nav-links a:hover {
-            color: #ff3f6c;
+            color: #fff;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
         }
         
         .nav-actions {
@@ -90,10 +130,21 @@
         
         .search-box input {
             padding: 10px 40px 10px 15px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 1px solid #2d3548;
+            border-radius: 8px;
             width: 300px;
             font-size: 14px;
+            background: #1a1f2e;
+            color: #fff;
+        }
+        
+        .search-box input::placeholder {
+            color: #6b7280;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #ff66b3;
         }
         
         .search-box i {
@@ -101,18 +152,18 @@
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
-            color: #888;
+            color: #6b7280;
         }
         
         .nav-icon {
             font-size: 20px;
-            color: #333;
+            color: #b4bcd0;
             cursor: pointer;
             transition: color 0.3s;
         }
         
         .nav-icon:hover {
-            color: #ff3f6c;
+            color: #7dd3fc;
         }
         
         /* Main Content */
@@ -122,10 +173,11 @@
         
         /* Footer */
         .footer {
-            background-color: #282c3f;
+            background-color: #0f0f0f;
             color: #fff;
             padding: 50px 0 20px;
-            margin-top: 80px;
+            margin-top: 0;
+            border-top: 1px solid #2d3548;
         }
         
         .footer-container {
@@ -147,6 +199,10 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
+            background: linear-gradient(135deg, #90ee90 0%, #7dd3fc 50%, #ff66b3 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .footer-section ul {
@@ -158,21 +214,21 @@
         }
         
         .footer-section a {
-            color: #94969f;
+            color: #6b7280;
             text-decoration: none;
             font-size: 14px;
             transition: color 0.3s;
         }
         
         .footer-section a:hover {
-            color: #fff;
+            color: #ff66b3;
         }
         
         .footer-bottom {
-            border-top: 1px solid #40444f;
+            border-top: 1px solid #2d3548;
             padding-top: 20px;
             text-align: center;
-            color: #94969f;
+            color: #6b7280;
             font-size: 14px;
         }
         
@@ -195,7 +251,7 @@
         }
         
         .social-icon:hover {
-            background-color: #ff3f6c;
+            background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 50%, #ff66b3 100%);
         }
         
         /* Responsive */
@@ -218,19 +274,21 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
-            <a href="{% url 'core:home' %}" class="logo">MyStore</a>
+            <a href="{% url 'core:home' %}" class="logo">
+                <img src="{% static 'logo_small.png' %}" alt="Abhirang" class="logo-image" onerror="this.style.display='none'">
+            </a>
             
             <ul class="nav-links">
-                <li><a href="#">Men</a></li>
-                <li><a href="#">Women</a></li>
-                <li><a href="#">Kids</a></li>
-                <li><a href="#">Home & Living</a></li>
-                <li><a href="#">Beauty</a></li>
+                <li><a href="#">Kids Collection</a></li>
+                <li><a href="#">Cartoon Prints</a></li>
+                <li><a href="#">Abstract</a></li>
+                <li><a href="#">Quotes</a></li>
+                <li><a href="#">New Arrivals</a></li>
             </ul>
             
             <div class="nav-actions">
                 <div class="search-box">
-                    <input type="text" placeholder="Search for products, brands and more">
+                    <input type="text" placeholder="Search for t-shirt designs...">
                     <i class="fas fa-search"></i>
                 </div>
                 
@@ -260,14 +318,14 @@
         <div class="footer-container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h3>Online Shopping</h3>
+                    <h3>Collections</h3>
                     <ul>
-                        <li><a href="#">Men</a></li>
-                        <li><a href="#">Women</a></li>
-                        <li><a href="#">Kids</a></li>
-                        <li><a href="#">Home & Living</a></li>
-                        <li><a href="#">Beauty</a></li>
-                        <li><a href="#">Gift Cards</a></li>
+                        <li><a href="#">Abstract Art</a></li>
+                        <li><a href="#">Cartoon Vibes</a></li>
+                        <li><a href="#">Inspiring Quotes</a></li>
+                        <li><a href="#">Minimalist</a></li>
+                        <li><a href="#">Retro Wave</a></li>
+                        <li><a href="#">Nature & Wildlife</a></li>
                     </ul>
                 </div>
                 
@@ -286,13 +344,13 @@
                 </div>
                 
                 <div class="footer-section">
-                    <h3>Useful Links</h3>
+                    <h3>About Abhirang</h3>
                     <ul>
-                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Our Story</a></li>
+                        <li><a href="#">Quality Promise</a></li>
+                        <li><a href="#">Design Process</a></li>
                         <li><a href="#">Careers</a></li>
-                        <li><a href="#">Site Map</a></li>
-                        <li><a href="#">Corporate Information</a></li>
-                        <li><a href="#">Whitehat</a></li>
+                        <li><a href="#">Blog</a></li>
                     </ul>
                 </div>
                 
@@ -308,7 +366,7 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 MyStore. All rights reserved.</p>
+                <p>&copy; 2025 Abhirang. All rights reserved. Made with 💜 for T-shirt lovers</p>
             </div>
         </div>
     </footer>

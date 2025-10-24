@@ -1,9 +1,11 @@
 {% extends 'accounts/base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="auth-header">
+    <img src="{% static 'logo_small.png' %}" alt="आभारंग Logo">
     <h2>Welcome Back</h2>
-    <p>Login to MyStore</p>
+    <p>Login to आभारंग</p>
 </div>
 
 <form method="post" class="auth-form">
