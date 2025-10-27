@@ -6,7 +6,7 @@
 {% block extra_css %}
 <style>
     body {
-        background: #000000;
+        background: linear-gradient(135deg, #0d1b2a 0%, #1b263b 50%, #0d1b2a 100%);
         color: #fff;
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
@@ -22,8 +22,56 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        background: linear-gradient(135deg, #0a0a0a 0%, #0f0514 50%, #14081a 100%);
         overflow: hidden;
+    }
+    
+    /* Hero Carousel Background */
+    .hero-carousel {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 0;
+    }
+    
+    .hero-slides {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        transition: transform 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .hero-slide {
+        min-width: 100%;
+        height: 100%;
+        position: relative;
+    }
+    
+    .hero-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        animation: kenBurns 20s ease-in-out infinite alternate;
+    }
+    
+    @keyframes kenBurns {
+        0% { transform: scale(1); }
+        100% { transform: scale(1.1); }
+    }
+    
+    .hero-slide-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(135deg,
+            rgba(26, 26, 46, 0.85) 0%,
+            rgba(22, 33, 62, 0.8) 30%,
+            rgba(15, 52, 96, 0.75) 60%,
+            rgba(26, 26, 46, 0.85) 100%);
+        z-index: 1;
     }
     
     .hero-bg {
@@ -33,13 +81,15 @@
         width: 100%;
         height: 100%;
         background: 
-            radial-gradient(ellipse at 15% 25%, rgba(144, 238, 144, 0.25) 0%, transparent 45%),
-            radial-gradient(ellipse at 85% 15%, rgba(125, 211, 252, 0.3) 0%, transparent 50%),
-            radial-gradient(ellipse at 75% 75%, rgba(255, 102, 179, 0.3) 0%, transparent 55%),
-            radial-gradient(ellipse at 50% 50%, rgba(147, 112, 219, 0.2) 0%, transparent 65%),
-            radial-gradient(ellipse at 30% 85%, rgba(255, 157, 92, 0.25) 0%, transparent 50%);
+            radial-gradient(ellipse at 15% 25%, rgba(144, 238, 144, 0.4) 0%, transparent 40%),
+            radial-gradient(ellipse at 85% 15%, rgba(125, 211, 252, 0.45) 0%, transparent 45%),
+            radial-gradient(ellipse at 75% 75%, rgba(255, 102, 179, 0.45) 0%, transparent 50%),
+            radial-gradient(ellipse at 50% 50%, rgba(147, 112, 219, 0.35) 0%, transparent 60%),
+            radial-gradient(ellipse at 30% 85%, rgba(255, 157, 92, 0.4) 0%, transparent 45%),
+            radial-gradient(ellipse at 90% 50%, rgba(255, 215, 0, 0.35) 0%, transparent 45%);
         animation: morphGradient 15s ease-in-out infinite;
-        filter: blur(80px);
+        filter: blur(60px);
+        z-index: 2;
     }
     
     @keyframes morphGradient {
@@ -48,18 +98,99 @@
             transform: scale(1) rotate(0deg); 
         }
         33% { 
-            opacity: 0.8; 
-            transform: scale(1.1) rotate(5deg); 
+            opacity: 0.9; 
+            transform: scale(1.15) rotate(5deg); 
         }
         66% { 
-            opacity: 0.9; 
-            transform: scale(0.95) rotate(-5deg); 
+            opacity: 0.95; 
+            transform: scale(0.9) rotate(-5deg); 
         }
+    }
+    
+    /* Hero Navigation Controls */
+    .hero-nav {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 10;
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 0 2rem;
+        pointer-events: none;
+    }
+    
+    .hero-nav-btn {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 2px solid rgba(125, 211, 252, 0.4);
+        backdrop-filter: blur(10px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        pointer-events: all;
+        font-size: 24px;
+        color: #7dd3fc;
+        box-shadow: 0 0 20px rgba(125, 211, 252, 0.3);
+    }
+    
+    .hero-nav-btn:hover {
+        background: rgba(255, 255, 255, 0.2);
+        border-color: rgba(125, 211, 252, 0.8);
+        transform: scale(1.1);
+        box-shadow: 0 0 40px rgba(125, 211, 252, 0.6);
+    }
+    
+    /* Hero Indicators */
+    .hero-indicators {
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+        z-index: 10;
+    }
+    
+    .hero-indicator {
+        width: 50px;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.3);
+        border-radius: 2px;
+        cursor: pointer;
+        transition: all 0.4s ease;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-indicator.active {
+        background: linear-gradient(90deg, #7dd3fc, #90ee90);
+        box-shadow: 0 0 20px rgba(125, 211, 252, 0.6);
+    }
+    
+    .hero-indicator.active::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+        animation: indicatorShine 2s ease-in-out infinite;
+    }
+    
+    @keyframes indicatorShine {
+        0% { left: -100%; }
+        50%, 100% { left: 100%; }
     }
     
     .hero-content {
         position: relative;
-        z-index: 2;
+        z-index: 10;
         text-align: center;
         max-width: 1300px;
         padding: 0 40px;
@@ -246,8 +377,22 @@
     /* Collections Section */
     .collections-section {
         padding: 140px 40px 120px;
-        background: linear-gradient(180deg, #000000 0%, #0a0514 50%, #000000 100%);
+        background: linear-gradient(135deg, 
+            #0f1724 0%, 
+            #1a2332 20%, 
+            #0d1b2a 40%,
+            #1b263b 60%,
+            #0f1724 80%,
+            #1a2332 100%);
+        background-size: 400% 400%;
+        animation: sectionGradient 25s ease infinite;
         position: relative;
+    }
+    
+    @keyframes sectionGradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
     
     .collections-section::before {
@@ -258,9 +403,17 @@
         width: 100%;
         height: 100%;
         background: 
-            radial-gradient(circle at 20% 20%, rgba(144, 238, 144, 0.08) 0%, transparent 50%),
-            radial-gradient(circle at 80% 80%, rgba(255, 102, 179, 0.08) 0%, transparent 50%);
+            radial-gradient(circle at 20% 20%, rgba(144, 238, 144, 0.15) 0%, transparent 45%),
+            radial-gradient(circle at 80% 80%, rgba(255, 102, 179, 0.15) 0%, transparent 45%),
+            radial-gradient(circle at 50% 50%, rgba(125, 211, 252, 0.12) 0%, transparent 50%),
+            radial-gradient(circle at 10% 70%, rgba(255, 215, 0, 0.12) 0%, transparent 45%);
         pointer-events: none;
+        animation: pulseGlow 8s ease-in-out infinite;
+    }
+    
+    @keyframes pulseGlow {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.7; }
     }
     
     .section-header {
@@ -329,9 +482,10 @@
         overflow: hidden;
         cursor: pointer;
         transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        background: linear-gradient(135deg, #0f0514 0%, #1a0a2e 100%);
-        border: 1px solid rgba(125, 211, 252, 0.2);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        background: linear-gradient(135deg, #1e2a3a 0%, #243447 100%);
+        border: 2px solid rgba(125, 211, 252, 0.4);
+        box-shadow: 0 15px 50px rgba(125, 211, 252, 0.2),
+                    0 0 40px rgba(255, 102, 179, 0.15);
     }
     
     .collection-card::before {
@@ -344,10 +498,11 @@
         background: conic-gradient(
             from 0deg at 50% 50%,
             transparent 0deg,
-            rgba(255, 102, 179, 0.3) 60deg,
-            rgba(125, 211, 252, 0.3) 120deg,
-            rgba(144, 238, 144, 0.3) 180deg,
-            transparent 240deg
+            rgba(255, 102, 179, 0.5) 60deg,
+            rgba(125, 211, 252, 0.5) 120deg,
+            rgba(144, 238, 144, 0.5) 180deg,
+            rgba(255, 215, 0, 0.4) 240deg,
+            transparent 300deg
         );
         opacity: 0;
         transition: all 0.6s ease;
@@ -364,7 +519,9 @@
         content: '';
         position: absolute;
         inset: 2px;
-        background: linear-gradient(135deg, #0f0514 0%, #1a0a2e 100%);
+        background: linear-gradient(135deg, 
+            rgba(30, 42, 58, 0.95) 0%, 
+            rgba(36, 52, 71, 0.95) 100%);
         border-radius: 18px;
         z-index: 1;
     }
@@ -375,9 +532,10 @@
     
     .collection-card:hover {
         transform: translateY(-20px) scale(1.02);
-        box-shadow: 0 40px 100px rgba(125, 211, 252, 0.6),
-                    0 0 80px rgba(255, 102, 179, 0.4);
-        border-color: rgba(144, 238, 144, 0.5);
+        box-shadow: 0 40px 100px rgba(125, 211, 252, 0.8),
+                    0 0 80px rgba(255, 102, 179, 0.6),
+                    0 0 120px rgba(144, 238, 144, 0.4);
+        border-color: rgba(144, 238, 144, 0.8);
     }
     
     .collection-image {
@@ -433,7 +591,14 @@
     /* Featured Products */
     .products-section {
         padding: 140px 40px 120px;
-        background: linear-gradient(180deg, #000000 0%, #0f0514 50%, #000000 100%);
+        background: linear-gradient(135deg, 
+            #16213e 0%, 
+            #0f3460 25%, 
+            #16213e 50%,
+            #1a1a2e 75%,
+            #16213e 100%);
+        background-size: 400% 400%;
+        animation: sectionGradient 30s ease infinite;
         position: relative;
     }
     
@@ -445,9 +610,11 @@
         width: 100%;
         height: 100%;
         background: 
-            radial-gradient(circle at 80% 30%, rgba(147, 112, 219, 0.1) 0%, transparent 50%),
-            radial-gradient(circle at 20% 70%, rgba(255, 157, 92, 0.1) 0%, transparent 50%);
+            radial-gradient(circle at 80% 30%, rgba(147, 112, 219, 0.18) 0%, transparent 45%),
+            radial-gradient(circle at 20% 70%, rgba(255, 157, 92, 0.18) 0%, transparent 45%),
+            radial-gradient(circle at 60% 60%, rgba(125, 211, 252, 0.15) 0%, transparent 50%);
         pointer-events: none;
+        animation: pulseGlow 10s ease-in-out infinite;
     }
     
     .products-grid {
@@ -460,13 +627,14 @@
     }
     
     .product-card {
-        background: linear-gradient(135deg, #0f0514 0%, #1a0a2e 100%);
+        background: linear-gradient(135deg, #1e2a3a 0%, #283848 100%);
         border-radius: 24px;
         overflow: hidden;
         transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        border: 1px solid rgba(125, 211, 252, 0.15);
+        border: 2px solid rgba(125, 211, 252, 0.3);
         position: relative;
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        box-shadow: 0 15px 50px rgba(125, 211, 252, 0.25),
+                    0 0 40px rgba(255, 102, 179, 0.15);
     }
     
     .product-card::before {
@@ -477,9 +645,9 @@
         width: 100%;
         height: 100%;
         background: linear-gradient(135deg, 
-            rgba(255, 157, 92, 0.15) 0%, 
-            rgba(255, 102, 179, 0.15) 50%, 
-            rgba(147, 112, 219, 0.15) 100%);
+            rgba(255, 157, 92, 0.25) 0%, 
+            rgba(255, 102, 179, 0.25) 50%, 
+            rgba(147, 112, 219, 0.25) 100%);
         opacity: 0;
         transition: opacity 0.6s ease;
         pointer-events: none;
@@ -515,9 +683,10 @@
     
     .product-card:hover {
         transform: translateY(-18px) scale(1.02);
-        box-shadow: 0 35px 90px rgba(144, 238, 144, 0.5),
-                    0 0 60px rgba(255, 102, 179, 0.3);
-        border-color: rgba(144, 238, 144, 0.5);
+        box-shadow: 0 35px 90px rgba(144, 238, 144, 0.7),
+                    0 0 60px rgba(255, 102, 179, 0.5),
+                    0 0 100px rgba(125, 211, 252, 0.4);
+        border-color: rgba(144, 238, 144, 0.7);
     }
     
     .product-image {
@@ -639,7 +808,14 @@
     /* Why Choose Us */
     .features-section {
         padding: 140px 40px 120px;
-        background: #000000;
+        background: linear-gradient(135deg,
+            #0d1b2a 0%,
+            #1b263b 25%,
+            #0d1b2a 50%,
+            #1a2332 75%,
+            #0d1b2a 100%);
+        background-size: 400% 400%;
+        animation: sectionGradient 28s ease infinite;
         position: relative;
     }
     
@@ -651,8 +827,11 @@
         width: 100%;
         height: 100%;
         background: 
-            radial-gradient(circle at 50% 50%, rgba(125, 211, 252, 0.1) 0%, transparent 60%);
+            radial-gradient(circle at 50% 50%, rgba(125, 211, 252, 0.15) 0%, transparent 55%),
+            radial-gradient(circle at 10% 30%, rgba(144, 238, 144, 0.12) 0%, transparent 50%),
+            radial-gradient(circle at 90% 70%, rgba(255, 102, 179, 0.12) 0%, transparent 50%);
         pointer-events: none;
+        animation: pulseGlow 12s ease-in-out infinite;
     }
     
     .features-grid {
@@ -667,14 +846,17 @@
     .feature-item {
         text-align: center;
         padding: 60px 45px;
-        background: linear-gradient(135deg, rgba(15, 5, 20, 0.8) 0%, rgba(26, 10, 46, 0.8) 100%);
+        background: linear-gradient(135deg, 
+            rgba(30, 42, 58, 0.9) 0%, 
+            rgba(36, 52, 71, 0.9) 100%);
         border-radius: 30px;
-        border: 1px solid rgba(125, 211, 252, 0.2);
+        border: 2px solid rgba(125, 211, 252, 0.35);
         transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
         position: relative;
         overflow: hidden;
         backdrop-filter: blur(20px);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+        box-shadow: 0 15px 50px rgba(125, 211, 252, 0.2),
+                    0 0 40px rgba(255, 102, 179, 0.15);
     }
     
     .feature-item::before {
@@ -686,8 +868,8 @@
         height: 100%;
         background: linear-gradient(90deg, 
             transparent, 
-            rgba(255, 102, 179, 0.2), 
-            rgba(125, 211, 252, 0.2),
+            rgba(255, 102, 179, 0.25), 
+            rgba(125, 211, 252, 0.25),
             transparent);
         transition: left 0.8s ease;
     }
@@ -719,10 +901,13 @@
     
     .feature-item:hover {
         transform: translateY(-20px) scale(1.05);
-        border-color: rgba(125, 211, 252, 0.5);
-        box-shadow: 0 30px 80px rgba(125, 211, 252, 0.5),
-                    0 0 60px rgba(255, 102, 179, 0.3);
-        background: linear-gradient(135deg, rgba(15, 5, 20, 0.95) 0%, rgba(26, 10, 46, 0.95) 100%);
+        border-color: rgba(125, 211, 252, 0.7);
+        box-shadow: 0 30px 80px rgba(125, 211, 252, 0.6),
+                    0 0 60px rgba(255, 102, 179, 0.5),
+                    0 0 90px rgba(144, 238, 144, 0.3);
+        background: linear-gradient(135deg, 
+            rgba(30, 42, 58, 1) 0%, 
+            rgba(36, 52, 71, 1) 100%);
     }
     
     .feature-icon {
@@ -770,7 +955,14 @@
     /* CTA Section */
     .final-cta {
         padding: 150px 40px;
-        background: linear-gradient(135deg, #1a0a2e 0%, #0f0514 50%, #000000 100%);
+        background: linear-gradient(135deg, 
+            #16213e 0%, 
+            #0f3460 25%, 
+            #1a1a2e 50%,
+            #0f3460 75%,
+            #16213e 100%);
+        background-size: 400% 400%;
+        animation: sectionGradient 22s ease infinite;
         text-align: center;
         position: relative;
         overflow: hidden;
@@ -784,11 +976,12 @@
         width: 100%;
         height: 100%;
         background: 
-            radial-gradient(ellipse at 30% 50%, rgba(255, 102, 179, 0.3) 0%, transparent 50%),
-            radial-gradient(ellipse at 70% 50%, rgba(147, 112, 219, 0.3) 0%, transparent 50%),
-            radial-gradient(ellipse at 50% 50%, rgba(125, 211, 252, 0.2) 0%, transparent 60%);
+            radial-gradient(ellipse at 30% 50%, rgba(255, 102, 179, 0.4) 0%, transparent 45%),
+            radial-gradient(ellipse at 70% 50%, rgba(147, 112, 219, 0.4) 0%, transparent 45%),
+            radial-gradient(ellipse at 50% 50%, rgba(125, 211, 252, 0.35) 0%, transparent 55%),
+            radial-gradient(ellipse at 20% 20%, rgba(144, 238, 144, 0.3) 0%, transparent 50%);
         animation: morphGradient 12s ease-in-out infinite;
-        filter: blur(60px);
+        filter: blur(50px);
     }
     
     .final-cta-content {
@@ -923,6 +1116,24 @@
         .final-cta h2 {
             font-size: 64px;
         }
+        
+        .carousel-slide {
+            height: 500px;
+        }
+        
+        .carousel-title {
+            font-size: 38px;
+        }
+        
+        .carousel-description {
+            font-size: 18px;
+        }
+        
+        .carousel-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
     }
     
     @media (max-width: 768px) {
@@ -985,31 +1196,80 @@
         .feature-title {
             font-size: 22px;
         }
+        
+        .hero-nav-btn {
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+        }
+        
+        .hero-indicator {
+            width: 35px;
+        }
     }
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero Section -->
+<!-- Hero Section with Integrated Carousel -->
 <section class="hero-section">
+    <!-- Hero Carousel Background -->
+    <div class="hero-carousel">
+        <div class="hero-slides" id="heroSlides">
+            <!-- Slide 1 -->
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=1920&h=1080&fit=crop&q=80" alt="Abstract Art Collection">
+                <div class="hero-slide-overlay"></div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=1920&h=1080&fit=crop&q=80" alt="Minimalist Design">
+                <div class="hero-slide-overlay"></div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=1920&h=1080&fit=crop&q=80" alt="Retro Vibes">
+                <div class="hero-slide-overlay"></div>
+            </div>
+            
+            <!-- Slide 4 -->
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=1920&h=1080&fit=crop&q=80" alt="Nature Collection">
+                <div class="hero-slide-overlay"></div>
+            </div>
+            
+            <!-- Slide 5 -->
+            <div class="hero-slide">
+                <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=1920&h=1080&fit=crop&q=80" alt="Typography Art">
+                <div class="hero-slide-overlay"></div>
+            </div>
+        </div>
+    </div>
+    
     <div class="hero-bg"></div>
+    
     <!-- Enhanced Particles Background -->
     <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; pointer-events: none; z-index: 1;">
-        <div style="position: absolute; width: 6px; height: 6px; background: linear-gradient(135deg, #90ee90, #7dd3fc); border-radius: 50%; top: 15%; left: 8%; animation: particleFloat 8s ease-in-out infinite; box-shadow: 0 0 20px #90ee90;"></div>
-        <div style="position: absolute; width: 10px; height: 10px; background: linear-gradient(135deg, #7dd3fc, #ff66b3); border-radius: 50%; top: 35%; left: 85%; animation: particleFloat 10s ease-in-out infinite 1s; box-shadow: 0 0 25px #7dd3fc;"></div>
-        <div style="position: absolute; width: 5px; height: 5px; background: linear-gradient(135deg, #ff66b3, #9370db); border-radius: 50%; top: 65%; left: 12%; animation: particleFloat 9s ease-in-out infinite 2s; box-shadow: 0 0 18px #ff66b3;"></div>
-        <div style="position: absolute; width: 8px; height: 8px; background: linear-gradient(135deg, #6495ed, #90ee90); border-radius: 50%; top: 25%; left: 75%; animation: particleFloat 11s ease-in-out infinite 0.5s; box-shadow: 0 0 22px #6495ed;"></div>
-        <div style="position: absolute; width: 7px; height: 7px; background: linear-gradient(135deg, #ff9d5c, #ff66b3); border-radius: 50%; top: 75%; left: 65%; animation: particleFloat 8.5s ease-in-out infinite 1.5s; box-shadow: 0 0 20px #ff9d5c;"></div>
-        <div style="position: absolute; width: 12px; height: 12px; background: linear-gradient(135deg, #90ee90, #7dd3fc); border-radius: 50%; top: 10%; left: 45%; animation: particleFloat 10.5s ease-in-out infinite 0.8s; box-shadow: 0 0 30px #90ee90;"></div>
-        <div style="position: absolute; width: 4px; height: 4px; background: linear-gradient(135deg, #9370db, #6495ed); border-radius: 50%; top: 85%; left: 22%; animation: particleFloat 9.5s ease-in-out infinite 2.5s; box-shadow: 0 0 15px #9370db;"></div>
-        <div style="position: absolute; width: 9px; height: 9px; background: linear-gradient(135deg, #7dd3fc, #90ee90); border-radius: 50%; top: 50%; left: 92%; animation: particleFloat 12s ease-in-out infinite 1.2s; box-shadow: 0 0 25px #7dd3fc;"></div>
-        <div style="position: absolute; width: 6px; height: 6px; background: linear-gradient(135deg, #6495ed, #ff66b3); border-radius: 50%; top: 20%; left: 55%; animation: particleFloat 8.8s ease-in-out infinite 1.8s; box-shadow: 0 0 20px #6495ed;"></div>
-        <div style="position: absolute; width: 8px; height: 8px; background: linear-gradient(135deg, #90ee90, #ff9d5c); border-radius: 50%; top: 90%; left: 78%; animation: particleFloat 10.2s ease-in-out infinite 2.2s; box-shadow: 0 0 22px #90ee90;"></div>
-        <div style="position: absolute; width: 5px; height: 5px; background: linear-gradient(135deg, #ff66b3, #7dd3fc); border-radius: 50%; top: 40%; left: 35%; animation: particleFloat 9.8s ease-in-out infinite 0.3s; box-shadow: 0 0 18px #ff66b3;"></div>
-        <div style="position: absolute; width: 11px; height: 11px; background: linear-gradient(135deg, #7dd3fc, #9370db); border-radius: 50%; top: 60%; left: 48%; animation: particleFloat 11.5s ease-in-out infinite 1.7s; box-shadow: 0 0 28px #7dd3fc;"></div>
-        <div style="position: absolute; width: 7px; height: 7px; background: linear-gradient(135deg, #ff9d5c, #6495ed); border-radius: 50%; top: 30%; left: 18%; animation: particleFloat 9.2s ease-in-out infinite 2.8s; box-shadow: 0 0 20px #ff9d5c;"></div>
-        <div style="position: absolute; width: 6px; height: 6px; background: linear-gradient(135deg, #9370db, #90ee90); border-radius: 50%; top: 70%; left: 88%; animation: particleFloat 10.8s ease-in-out infinite 0.6s; box-shadow: 0 0 20px #9370db;"></div>
-        <div style="position: absolute; width: 10px; height: 10px; background: linear-gradient(135deg, #6495ed, #ff66b3); border-radius: 50%; top: 45%; left: 5%; animation: particleFloat 11.2s ease-in-out infinite 1.4s; box-shadow: 0 0 25px #6495ed;"></div>
+        <div style="position: absolute; width: 8px; height: 8px; background: linear-gradient(135deg, #90ee90, #7dd3fc); border-radius: 50%; top: 15%; left: 8%; animation: particleFloat 8s ease-in-out infinite; box-shadow: 0 0 30px #90ee90, 0 0 50px #7dd3fc;"></div>
+        <div style="position: absolute; width: 12px; height: 12px; background: linear-gradient(135deg, #7dd3fc, #ff66b3); border-radius: 50%; top: 35%; left: 85%; animation: particleFloat 10s ease-in-out infinite 1s; box-shadow: 0 0 40px #7dd3fc, 0 0 60px #ff66b3;"></div>
+        <div style="position: absolute; width: 7px; height: 7px; background: linear-gradient(135deg, #ff66b3, #9370db); border-radius: 50%; top: 65%; left: 12%; animation: particleFloat 9s ease-in-out infinite 2s; box-shadow: 0 0 35px #ff66b3, 0 0 55px #9370db;"></div>
+        <div style="position: absolute; width: 10px; height: 10px; background: linear-gradient(135deg, #6495ed, #90ee90); border-radius: 50%; top: 25%; left: 75%; animation: particleFloat 11s ease-in-out infinite 0.5s; box-shadow: 0 0 40px #6495ed, 0 0 60px #90ee90;"></div>
+        <div style="position: absolute; width: 9px; height: 9px; background: linear-gradient(135deg, #ff9d5c, #ff66b3); border-radius: 50%; top: 75%; left: 65%; animation: particleFloat 8.5s ease-in-out infinite 1.5s; box-shadow: 0 0 38px #ff9d5c, 0 0 58px #ff66b3;"></div>
+        <div style="position: absolute; width: 14px; height: 14px; background: linear-gradient(135deg, #90ee90, #7dd3fc); border-radius: 50%; top: 10%; left: 45%; animation: particleFloat 10.5s ease-in-out infinite 0.8s; box-shadow: 0 0 45px #90ee90, 0 0 65px #7dd3fc;"></div>
+        <div style="position: absolute; width: 6px; height: 6px; background: linear-gradient(135deg, #9370db, #6495ed); border-radius: 50%; top: 85%; left: 22%; animation: particleFloat 9.5s ease-in-out infinite 2.5s; box-shadow: 0 0 32px #9370db, 0 0 52px #6495ed;"></div>
+        <div style="position: absolute; width: 11px; height: 11px; background: linear-gradient(135deg, #7dd3fc, #90ee90); border-radius: 50%; top: 50%; left: 92%; animation: particleFloat 12s ease-in-out infinite 1.2s; box-shadow: 0 0 42px #7dd3fc, 0 0 62px #90ee90;"></div>
+        <div style="position: absolute; width: 8px; height: 8px; background: linear-gradient(135deg, #6495ed, #ff66b3); border-radius: 50%; top: 20%; left: 55%; animation: particleFloat 8.8s ease-in-out infinite 1.8s; box-shadow: 0 0 38px #6495ed, 0 0 58px #ff66b3;"></div>
+        <div style="position: absolute; width: 10px; height: 10px; background: linear-gradient(135deg, #90ee90, #ff9d5c); border-radius: 50%; top: 90%; left: 78%; animation: particleFloat 10.2s ease-in-out infinite 2.2s; box-shadow: 0 0 40px #90ee90, 0 0 60px #ff9d5c;"></div>
+        <div style="position: absolute; width: 7px; height: 7px; background: linear-gradient(135deg, #ff66b3, #7dd3fc); border-radius: 50%; top: 40%; left: 35%; animation: particleFloat 9.8s ease-in-out infinite 0.3s; box-shadow: 0 0 36px #ff66b3, 0 0 56px #7dd3fc;"></div>
+        <div style="position: absolute; width: 13px; height: 13px; background: linear-gradient(135deg, #7dd3fc, #9370db); border-radius: 50%; top: 60%; left: 48%; animation: particleFloat 11.5s ease-in-out infinite 1.7s; box-shadow: 0 0 44px #7dd3fc, 0 0 64px #9370db;"></div>
+        <div style="position: absolute; width: 9px; height: 9px; background: linear-gradient(135deg, #ff9d5c, #6495ed); border-radius: 50%; top: 30%; left: 18%; animation: particleFloat 9.2s ease-in-out infinite 2.8s; box-shadow: 0 0 38px #ff9d5c, 0 0 58px #6495ed;"></div>
+        <div style="position: absolute; width: 8px; height: 8px; background: linear-gradient(135deg, #9370db, #90ee90); border-radius: 50%; top: 70%; left: 88%; animation: particleFloat 10.8s ease-in-out infinite 0.6s; box-shadow: 0 0 38px #9370db, 0 0 58px #90ee90;"></div>
+        <div style="position: absolute; width: 12px; height: 12px; background: linear-gradient(135deg, #6495ed, #ff66b3); border-radius: 50%; top: 45%; left: 5%; animation: particleFloat 11.2s ease-in-out infinite 1.4s; box-shadow: 0 0 42px #6495ed, 0 0 62px #ff66b3;"></div>
+        <div style="position: absolute; width: 10px; height: 10px; background: linear-gradient(135deg, #ffd700, #ff9d5c); border-radius: 50%; top: 55%; left: 60%; animation: particleFloat 9.5s ease-in-out infinite 1.9s; box-shadow: 0 0 45px #ffd700, 0 0 65px #ff9d5c;"></div>
+        <div style="position: absolute; width: 9px; height: 9px; background: linear-gradient(135deg, #90ee90, #ffd700); border-radius: 50%; top: 12%; left: 28%; animation: particleFloat 10.3s ease-in-out infinite 0.7s; box-shadow: 0 0 40px #90ee90, 0 0 60px #ffd700;"></div>
+        <div style="position: absolute; width: 11px; height: 11px; background: linear-gradient(135deg, #ff66b3, #ffd700); border-radius: 50%; top: 78%; left: 42%; animation: particleFloat 11.8s ease-in-out infinite 2.3s; box-shadow: 0 0 42px #ff66b3, 0 0 62px #ffd700;"></div>
     </div>
     <div class="hero-content">
         <img src="{% static 'logo_small.png' %}" alt="Abhirang" class="hero-logo" onerror="this.style.display='none'">
@@ -1020,7 +1280,23 @@
             <a href="#products" class="cta-btn cta-secondary">Shop Now</a>
         </div>
     </div>
+    
+    <!-- Hero Navigation Controls -->
+    <div class="hero-nav">
+        <button class="hero-nav-btn" onclick="moveHeroSlide(-1)">‹</button>
+        <button class="hero-nav-btn" onclick="moveHeroSlide(1)">›</button>
+    </div>
+    
+    <!-- Hero Indicators -->
+    <div class="hero-indicators">
+        <div class="hero-indicator active" onclick="goToHeroSlide(0)"></div>
+        <div class="hero-indicator" onclick="goToHeroSlide(1)"></div>
+        <div class="hero-indicator" onclick="goToHeroSlide(2)"></div>
+        <div class="hero-indicator" onclick="goToHeroSlide(3)"></div>
+        <div class="hero-indicator" onclick="goToHeroSlide(4)"></div>
+    </div>
 </section>
+
 
 <!-- Collections Section -->
 <section id="collections" class="collections-section">
@@ -1204,4 +1480,90 @@
         <a href="{% url 'accounts:signup' %}" class="cta-btn cta-primary">Create Account</a>
     </div>
 </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Hero Carousel functionality
+    let currentHeroSlide = 0;
+    const heroSlides = document.getElementById('heroSlides');
+    const heroSlideElements = document.querySelectorAll('.hero-slide');
+    const heroIndicators = document.querySelectorAll('.hero-indicator');
+    const totalHeroSlides = heroSlideElements.length;
+    
+    function updateHeroCarousel() {
+        heroSlides.style.transform = `translateX(-${currentHeroSlide * 100}%)`;
+        
+        // Update indicators
+        heroIndicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentHeroSlide);
+        });
+    }
+    
+    function moveHeroSlide(direction) {
+        currentHeroSlide += direction;
+        
+        if (currentHeroSlide < 0) {
+            currentHeroSlide = totalHeroSlides - 1;
+        } else if (currentHeroSlide >= totalHeroSlides) {
+            currentHeroSlide = 0;
+        }
+        
+        updateHeroCarousel();
+    }
+    
+    function goToHeroSlide(index) {
+        currentHeroSlide = index;
+        updateHeroCarousel();
+    }
+    
+    // Auto-play hero carousel
+    let heroAutoPlayInterval = setInterval(() => {
+        moveHeroSlide(1);
+    }, 6000);
+    
+    // Pause auto-play on hover
+    const heroSection = document.querySelector('.hero-section');
+    
+    heroSection.addEventListener('mouseenter', () => {
+        clearInterval(heroAutoPlayInterval);
+    });
+    
+    heroSection.addEventListener('mouseleave', () => {
+        heroAutoPlayInterval = setInterval(() => {
+            moveHeroSlide(1);
+        }, 6000);
+    });
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowLeft') {
+            moveHeroSlide(-1);
+        } else if (e.key === 'ArrowRight') {
+            moveHeroSlide(1);
+        }
+    });
+    
+    // Touch/Swipe support
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    heroSection.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    heroSection.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleHeroSwipe();
+    });
+    
+    function handleHeroSwipe() {
+        if (touchEndX < touchStartX - 50) {
+            moveHeroSlide(1);
+        }
+        if (touchEndX > touchStartX + 50) {
+            moveHeroSlide(-1);
+        }
+    }
+</script>
 {% endblock %}
