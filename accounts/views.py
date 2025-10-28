@@ -14,6 +14,7 @@ def signup_view(request):
         return redirect('home')
     
     if request.method == 'POST':
+        print(request.POST)
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
@@ -43,9 +44,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'Welcome back, {username}!')
-                # Redirect to next page if provided, otherwise to home
-                next_page = request.GET.get('next', 'home')
-                return redirect(next_page)
+                return redirect("accounts:profile")
         else:
             messages.error(request, 'Invalid username or password.')
     else:
