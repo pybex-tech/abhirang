@@ -449,17 +449,21 @@
             </a>
             
             <ul class="nav-links">
-                <li><a href="#">Kids Collection</a></li>
-                <li><a href="#">Cartoon Prints</a></li>
-                <li><a href="#">Abstract</a></li>
-                <li><a href="#">Quotes</a></li>
-                <li><a href="#">New Arrivals</a></li>
+                <li><a href="{% url 'core:home' %}">Home</a></li>
+                <li><a href="{% url 'products:product_list' %}">Shop All</a></li>
+                <li><a href="{% url 'products:category_list' %}">Collections</a></li>
+                <li><a href="{% url 'products:product_list' %}#products">Products</a></li>
+                <li><a href="#about">About</a></li>
             </ul>
             
             <div class="nav-actions">
                 <div class="search-box">
-                    <input type="text" placeholder="Search for t-shirt designs...">
-                    <i class="fas fa-search"></i>
+                    <form method="get" action="{% url 'products:search' %}" style="display: flex; align-items: center; width: 100%;">
+                        <input type="text" name="q" placeholder="Search for t-shirt designs..." style="flex: 1;">
+                        <button type="submit" style="background: none; border: none; cursor: pointer; padding: 0; margin: 0;">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </form>
                 </div>
                 
                 {% if user.is_authenticated %}

@@ -1,0 +1,628 @@
+{% extends 'products/base_products.html' %}
+{% load static %}
+
+{% block products_content %}
+<!-- Product Detail -->
+<div class="product-detail-container">
+    <!-- Back Button -->
+    <a href="{% url 'products:category_products' product.category.slug %}" class="back-link">
+        <i class="fas fa-arrow-left"></i> Back to {{ product.category.name }}
+    </a>
+    
+    <div class="product-detail-grid">
+        <!-- Image Gallery -->
+        <div class="product-gallery">
+            <div class="main-image-wrapper">
+                {% if product.images.all %}
+                    <img src="{{ product.images.first.image_url }}" alt="{{ product.name }}" class="main-image" id="mainImage">
+                {% else %}
+                    <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=800&h=1000&fit=crop&q=80" alt="{{ product.name }}" class="main-image" id="mainImage">
+                {% endif %}
+                
+                {% if product.discount_percentage > 0 %}
+                <div class="discount-badge">-{{ product.discount_percentage }}% OFF</div>
+                {% endif %}
+            </div>
+            
+            {% if product.images.count > 1 %}
+            <div class="thumbnail-grid">
+                {% for image in product.images.all %}
+                <img src="{{ image.image_url }}" alt="{{ image.alt_text }}" class="thumbnail {% if forloop.first %}active{% endif %}" onclick="changeMainImage('{{ image.image_url }}', this)">
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+        
+        <!-- Product Info -->
+        <div class="product-detail-info">
+            <div class="product-category-badge">{{ product.category.name }}</div>
+            <h1 class="product-detail-title">{{ product.name }}</h1>
+            
+            <div class="product-price-section">
+                {% if product.discount_price %}
+                    <span class="detail-original-price">₹{{ product.price }}</span>
+                    <span class="detail-current-price">₹{{ product.final_price }}</span>
+                    <span class="savings-badge">Save ₹{{ product.price|add:"-"|add:product.final_price|floatformat:0 }}</span>
+                {% else %}
+                    <span class="detail-current-price">₹{{ product.price }}</span>
+                {% endif %}
+            </div>
+            
+            <p class="product-description">{{ product.description }}</p>
+            
+            <!-- Product Specifications -->
+            <div class="product-specs">
+                <div class="spec-item">
+                    <i class="fas fa-tshirt"></i>
+                    <div>
+                        <span class="spec-label">Fabric</span>
+                        <span class="spec-value">{{ product.fabric }}</span>
+                    </div>
+                </div>
+                <div class="spec-item">
+                    <i class="fas fa-palette"></i>
+                    <div>
+                        <span class="spec-label">Color</span>
+                        <span class="spec-value">{{ product.color }}</span>
+                    </div>
+                </div>
+                <div class="spec-item">
+                    <i class="fas fa-box"></i>
+                    <div>
+                        <span class="spec-label">Stock</span>
+                        <span class="spec-value">{{ product.stock }} units</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Size Selection -->
+            <div class="size-selection">
+                <label class="size-label">Select Size</label>
+                <div class="size-options">
+                    {% for size in product.get_available_sizes_list %}
+                    <button class="size-btn" onclick="selectSize(this)">{{ size }}</button>
+                    {% endfor %}
+                </div>
+            </div>
+            
+            <!-- Action Buttons -->
+            <div class="action-buttons">
+                {% if product.in_stock %}
+                <button class="btn-add-cart">
+                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                </button>
+                <button class="btn-buy-now">
+                    <i class="fas fa-bolt"></i> Buy Now
+                </button>
+                {% else %}
+                <button class="btn-out-of-stock" disabled>
+                    <i class="fas fa-times-circle"></i> Out of Stock
+                </button>
+                {% endif %}
+            </div>
+            
+            <!-- Additional Info -->
+            <div class="product-features">
+                <div class="feature-item">
+                    <i class="fas fa-truck"></i>
+                    <span>Free Shipping on orders above ₹999</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-undo"></i>
+                    <span>7 Days Easy Return & Exchange</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>100% Original Products</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Related Products -->
+{% if related_products %}
+<div class="related-products-section">
+    <h2 class="section-heading">You May Also Like</h2>
+    <div class="related-products-grid">
+        {% for related in related_products %}
+        <div class="related-product-card">
+            <a href="{{ related.get_absolute_url }}">
+                <div class="related-image-wrapper">
+                    {% if related.images.all %}
+                        <img src="{{ related.images.first.image_url }}" alt="{{ related.name }}">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=400&h=500&fit=crop&q=80" alt="{{ related.name }}">
+                    {% endif %}
+                </div>
+                <div class="related-info">
+                    <h4>{{ related.name }}</h4>
+                    <span class="related-price">₹{{ related.final_price }}</span>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<style>
+    .product-detail-container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+    
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        color: rgba(125, 211, 252, 0.9);
+        text-decoration: none;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 30px;
+        padding: 10px 20px;
+        background: rgba(30, 42, 58, 0.6);
+        border: 2px solid rgba(125, 211, 252, 0.3);
+        border-radius: 50px;
+        transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+        background: rgba(125, 211, 252, 0.2);
+        border-color: rgba(125, 211, 252, 0.6);
+        transform: translateX(-5px);
+    }
+    
+    .product-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        margin-bottom: 80px;
+    }
+    
+    /* Image Gallery */
+    .product-gallery {
+        position: sticky;
+        top: 100px;
+    }
+    
+    .main-image-wrapper {
+        position: relative;
+        border-radius: 30px;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.3);
+        border: 3px solid rgba(125, 211, 252, 0.4);
+        box-shadow: 0 30px 80px rgba(125, 211, 252, 0.3);
+        margin-bottom: 20px;
+    }
+    
+    .main-image {
+        width: 100%;
+        display: block;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+    }
+    
+    .discount-badge {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, #ff66b3 0%, #ff9d5c 100%);
+        color: #fff;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        box-shadow: 0 10px 30px rgba(255, 102, 179, 0.6);
+    }
+    
+    .thumbnail-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+    }
+    
+    .thumbnail {
+        width: 100%;
+        aspect-ratio: 3/4;
+        object-fit: cover;
+        border-radius: 15px;
+        border: 2px solid rgba(125, 211, 252, 0.3);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        opacity: 0.6;
+    }
+    
+    .thumbnail:hover,
+    .thumbnail.active {
+        border-color: rgba(125, 211, 252, 0.9);
+        opacity: 1;
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(125, 211, 252, 0.4);
+    }
+    
+    /* Product Info */
+    .product-category-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        background: linear-gradient(135deg, rgba(125, 211, 252, 0.2) 0%, rgba(144, 238, 144, 0.2) 100%);
+        border: 2px solid rgba(125, 211, 252, 0.5);
+        border-radius: 50px;
+        color: #7dd3fc;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+    }
+    
+    .product-detail-title {
+        font-family: 'Bebas Neue', 'Syne', sans-serif;
+        font-size: 56px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #90ee90 0%, #7dd3fc 50%, #ff66b3 100%);
+        background-size: 200% 200%;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 25px;
+        line-height: 1.1;
+        text-transform: uppercase;
+        animation: gradientShift 8s ease infinite;
+    }
+    
+    .product-price-section {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .detail-current-price {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 48px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #90ee90 0%, #7dd3fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .detail-original-price {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 32px;
+        color: rgba(255, 255, 255, 0.4);
+        text-decoration: line-through;
+    }
+    
+    .savings-badge {
+        padding: 8px 18px;
+        background: rgba(255, 102, 179, 0.2);
+        border: 2px solid rgba(255, 102, 179, 0.5);
+        border-radius: 50px;
+        color: #ff66b3;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 14px;
+        font-weight: 700;
+    }
+    
+    .product-description {
+        font-family: 'Inter', sans-serif;
+        font-size: 16px;
+        line-height: 1.8;
+        color: rgba(255, 255, 255, 0.85);
+        margin-bottom: 35px;
+        padding: 25px;
+        background: rgba(30, 42, 58, 0.6);
+        border: 2px solid rgba(125, 211, 252, 0.2);
+        border-radius: 20px;
+    }
+    
+    .product-specs {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 35px;
+    }
+    
+    .spec-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 20px;
+        background: rgba(30, 42, 58, 0.6);
+        border: 2px solid rgba(125, 211, 252, 0.3);
+        border-radius: 20px;
+    }
+    
+    .spec-item i {
+        font-size: 28px;
+        color: #90ee90;
+    }
+    
+    .spec-label {
+        display: block;
+        font-family: 'Inter', sans-serif;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .spec-value {
+        display: block;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 16px;
+        color: #fff;
+        font-weight: 600;
+        margin-top: 4px;
+    }
+    
+    .size-selection {
+        margin-bottom: 35px;
+    }
+    
+    .size-label {
+        display: block;
+        font-family: 'Orbitron', 'Syne', sans-serif;
+        font-size: 16px;
+        color: #fff;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+    
+    .size-options {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+    
+    .size-btn {
+        width: 60px;
+        height: 60px;
+        background: rgba(30, 42, 58, 0.6);
+        border: 2px solid rgba(125, 211, 252, 0.3);
+        border-radius: 15px;
+        color: rgba(255, 255, 255, 0.8);
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .size-btn:hover,
+    .size-btn.selected {
+        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
+        border-color: transparent;
+        color: #0d1b2a;
+        transform: scale(1.1);
+        box-shadow: 0 10px 25px rgba(125, 211, 252, 0.5);
+    }
+    
+    .action-buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 35px;
+    }
+    
+    .btn-add-cart,
+    .btn-buy-now,
+    .btn-out-of-stock {
+        padding: 18px 30px;
+        border: none;
+        border-radius: 50px;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+    
+    .btn-add-cart {
+        background: rgba(30, 42, 58, 0.8);
+        border: 2px solid rgba(125, 211, 252, 0.5);
+        color: #7dd3fc;
+    }
+    
+    .btn-add-cart:hover {
+        background: rgba(125, 211, 252, 0.2);
+        border-color: rgba(125, 211, 252, 0.9);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(125, 211, 252, 0.4);
+    }
+    
+    .btn-buy-now {
+        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
+        color: #0d1b2a;
+        box-shadow: 0 10px 30px rgba(125, 211, 252, 0.4);
+    }
+    
+    .btn-buy-now:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 50px rgba(125, 211, 252, 0.6);
+    }
+    
+    .btn-out-of-stock {
+        background: rgba(100, 100, 100, 0.5);
+        border: 2px solid rgba(150, 150, 150, 0.5);
+        color: rgba(255, 255, 255, 0.5);
+        cursor: not-allowed;
+        grid-column: 1 / -1;
+    }
+    
+    .product-features {
+        padding: 25px;
+        background: rgba(30, 42, 58, 0.4);
+        border: 2px solid rgba(125, 211, 252, 0.2);
+        border-radius: 20px;
+    }
+    
+    .feature-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px 0;
+        font-family: 'Inter', sans-serif;
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.85);
+    }
+    
+    .feature-item:not(:last-child) {
+        border-bottom: 1px solid rgba(125, 211, 252, 0.15);
+    }
+    
+    .feature-item i {
+        font-size: 20px;
+        color: #90ee90;
+    }
+    
+    /* Related Products */
+    .related-products-section {
+        margin-top: 80px;
+        padding-top: 60px;
+        border-top: 2px solid rgba(125, 211, 252, 0.3);
+    }
+    
+    .section-heading {
+        font-family: 'Orbitron', 'Syne', sans-serif;
+        font-size: 42px;
+        font-weight: 900;
+        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        text-align: center;
+        margin-bottom: 50px;
+        text-transform: uppercase;
+    }
+    
+    .related-products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 25px;
+    }
+    
+    .related-product-card {
+        background: rgba(30, 42, 58, 0.6);
+        border: 2px solid rgba(125, 211, 252, 0.3);
+        border-radius: 20px;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    
+    .related-product-card:hover {
+        transform: translateY(-8px);
+        border-color: rgba(125, 211, 252, 0.8);
+        box-shadow: 0 15px 45px rgba(125, 211, 252, 0.4);
+    }
+    
+    .related-product-card a {
+        text-decoration: none;
+        color: inherit;
+    }
+    
+    .related-image-wrapper {
+        position: relative;
+        padding-top: 133.33%;
+        overflow: hidden;
+    }
+    
+    .related-image-wrapper img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s ease;
+    }
+    
+    .related-product-card:hover img {
+        transform: scale(1.1);
+    }
+    
+    .related-info {
+        padding: 20px;
+    }
+    
+    .related-info h4 {
+        font-family: 'Orbitron', 'Syne', sans-serif;
+        font-size: 16px;
+        color: #fff;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+    }
+    
+    .related-price {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 24px;
+        background: linear-gradient(135deg, #90ee90 0%, #7dd3fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    @media (max-width: 1024px) {
+        .product-detail-grid {
+            grid-template-columns: 1fr;
+            gap: 40px;
+        }
+        
+        .product-gallery {
+            position: relative;
+            top: 0;
+        }
+        
+        .product-detail-title {
+            font-size: 42px;
+        }
+        
+        .action-buttons {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .product-detail-title {
+            font-size: 32px;
+        }
+        
+        .detail-current-price {
+            font-size: 36px;
+        }
+        
+        .thumbnail-grid {
+            grid-template-columns: repeat(3, 1fr);
+        }
+    }
+</style>
+
+<script>
+    function changeMainImage(url, thumbnail) {
+        document.getElementById('mainImage').src = url;
+        document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+        thumbnail.classList.add('active');
+    }
+    
+    function selectSize(button) {
+        document.querySelectorAll('.size-btn').forEach(btn => btn.classList.remove('selected'));
+        button.classList.add('selected');
+    }
+</script>
+{% endblock %}

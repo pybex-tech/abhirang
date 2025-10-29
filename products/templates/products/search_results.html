@@ -1,0 +1,492 @@
+{% extends 'products/base_products.html' %}
+{% load static %}
+
+{% block products_content %}
+<!-- Page Header -->
+<div class="page-header">
+    <h1 class="page-title">{{ page_title }}</h1>
+    {% if query %}
+    <p class="page-subtitle">Showing results for "{{ query }}"</p>
+    {% else %}
+    <p class="page-subtitle">Enter a search term to find products</p>
+    {% endif %}
+</div>
+
+<!-- Search Results -->
+{% if query %}
+    {% if products %}
+    <div class="results-count">
+        <i class="fas fa-check-circle"></i>
+        Found {{ products.paginator.count }} product{{ products.paginator.count|pluralize }} matching your search
+    </div>
+    
+    <div class="products-grid">
+        {% for product in products %}
+        <div class="product-card" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:50 }}">
+            <a href="{{ product.get_absolute_url }}" class="product-link">
+                <div class="product-image-wrapper">
+                    {% if product.images.all %}
+                        <img src="{{ product.images.first.image_url }}" alt="{{ product.name }}" class="product-image">
+                    {% else %}
+                        <img src="https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&h=800&fit=crop&q=80" alt="{{ product.name }}" class="product-image">
+                    {% endif %}
+                    
+                    {% if product.discount_percentage > 0 %}
+                    <div class="product-badge">-{{ product.discount_percentage }}%</div>
+                    {% endif %}
+                    
+                    {% if not product.in_stock %}
+                    <div class="product-badge out-of-stock">Out of Stock</div>
+                    {% endif %}
+                    
+                    <div class="product-overlay">
+                        <span class="view-details">View Details</span>
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <div class="product-category">{{ product.category.name }}</div>
+                    <h3 class="product-name">{{ product.name }}</h3>
+                    
+                    <div class="product-pricing">
+                        {% if product.discount_price %}
+                            <span class="product-price original-price">₹{{ product.price }}</span>
+                            <span class="product-price current-price">₹{{ product.final_price }}</span>
+                        {% else %}
+                            <span class="product-price current-price">₹{{ product.price }}</span>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="product-meta">
+                        <span class="product-fabric"><i class="fas fa-tshirt"></i> {{ product.fabric }}</span>
+                        <span class="product-color"><i class="fas fa-palette"></i> {{ product.color }}</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+    
+    <!-- Pagination -->
+    {% if products.has_other_pages %}
+    <div class="pagination-wrapper">
+        <div class="pagination">
+            {% if products.has_previous %}
+            <a href="?q={{ query }}&page={{ products.previous_page_number }}" class="page-link">
+                <i class="fas fa-chevron-left"></i> Previous
+            </a>
+            {% endif %}
+            
+            <span class="page-info">
+                Page {{ products.number }} of {{ products.paginator.num_pages }}
+            </span>
+            
+            {% if products.has_next %}
+            <a href="?q={{ query }}&page={{ products.next_page_number }}" class="page-link">
+                Next <i class="fas fa-chevron-right"></i>
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <!-- No Results -->
+    <div class="no-results">
+        <i class="fas fa-search"></i>
+        <h3>No Products Found</h3>
+        <p>We couldn't find any products matching "{{ query }}"</p>
+        <div class="search-suggestions">
+            <h4>Search Suggestions:</h4>
+            <ul>
+                <li>Check your spelling</li>
+                <li>Try more general keywords</li>
+                <li>Try different keywords</li>
+                <li>Browse our <a href="{% url 'products:category_list' %}">collections</a></li>
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+{% else %}
+<!-- Empty Search State -->
+<div class="empty-search">
+    <i class="fas fa-search"></i>
+    <h3>Start Your Search</h3>
+    <p>Use the search box in the sidebar to find your perfect t-shirt</p>
+    <div class="quick-links">
+        <h4>Or browse by collection:</h4>
+        <div class="quick-categories">
+            {% for cat in categories %}
+            <a href="{% url 'products:category_products' cat.slug %}" class="quick-category">
+                {{ cat.name }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<style>
+    .results-count {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 20px 30px;
+        background: rgba(144, 238, 144, 0.15);
+        border: 2px solid rgba(144, 238, 144, 0.4);
+        border-radius: 20px;
+        margin-bottom: 40px;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 16px;
+        color: #90ee90;
+        font-weight: 600;
+    }
+    
+    .results-count i {
+        font-size: 22px;
+    }
+    
+    /* Reuse product grid styles from product_list.html */
+    .products-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+    
+    .product-card {
+        background: rgba(30, 42, 58, 0.6);
+        border: 2px solid rgba(125, 211, 252, 0.3);
+        border-radius: 25px;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .product-card:hover {
+        transform: translateY(-10px);
+        border-color: rgba(125, 211, 252, 0.8);
+        box-shadow: 0 20px 60px rgba(125, 211, 252, 0.4);
+    }
+    
+    .product-link {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+    
+    .product-image-wrapper {
+        position: relative;
+        padding-top: 133.33%;
+        overflow: hidden;
+        background: rgba(0, 0, 0, 0.3);
+    }
+    
+    .product-image {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.6s ease;
+    }
+    
+    .product-card:hover .product-image {
+        transform: scale(1.1);
+    }
+    
+    .product-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, #ff66b3 0%, #ff9d5c 100%);
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 50px;
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        box-shadow: 0 5px 20px rgba(255, 102, 179, 0.5);
+        z-index: 2;
+    }
+    
+    .product-badge.out-of-stock {
+        background: linear-gradient(135deg, #666 0%, #333 100%);
+        left: 15px;
+        right: auto;
+    }
+    
+    .product-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to top,
+            rgba(13, 27, 42, 0.95) 0%,
+            rgba(13, 27, 42, 0.7) 40%,
+            transparent 100%);
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding: 30px;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+    }
+    
+    .product-card:hover .product-overlay {
+        opacity: 1;
+    }
+    
+    .view-details {
+        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
+        color: #0d1b2a;
+        padding: 14px 35px;
+        border-radius: 50px;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transform: translateY(20px);
+        transition: transform 0.4s ease;
+        box-shadow: 0 10px 30px rgba(125, 211, 252, 0.5);
+    }
+    
+    .product-card:hover .view-details {
+        transform: translateY(0);
+    }
+    
+    .product-info {
+        padding: 25px;
+    }
+    
+    .product-category {
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 13px;
+        color: rgba(125, 211, 252, 0.9);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+    
+    .product-name {
+        font-family: 'Orbitron', 'Syne', sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #fff;
+        margin-bottom: 15px;
+        line-height: 1.3;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    
+    .product-pricing {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 15px;
+    }
+    
+    .product-price {
+        font-family: 'Bebas Neue', sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+    }
+    
+    .current-price {
+        background: linear-gradient(135deg, #90ee90 0%, #7dd3fc 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .original-price {
+        color: rgba(255, 255, 255, 0.4);
+        text-decoration: line-through;
+        font-size: 20px;
+    }
+    
+    .product-meta {
+        display: flex;
+        gap: 15px;
+        font-family: 'Inter', sans-serif;
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    
+    .product-meta i {
+        color: rgba(144, 238, 144, 0.8);
+        margin-right: 5px;
+    }
+    
+    /* Pagination */
+    .pagination-wrapper {
+        display: flex;
+        justify-content: center;
+        margin-top: 60px;
+    }
+    
+    .pagination {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        background: rgba(30, 42, 58, 0.6);
+        padding: 20px 40px;
+        border-radius: 50px;
+        border: 2px solid rgba(125, 211, 252, 0.3);
+    }
+    
+    .page-link {
+        padding: 12px 24px;
+        background: linear-gradient(135deg, rgba(125, 211, 252, 0.2) 0%, rgba(144, 238, 144, 0.2) 100%);
+        border: 2px solid rgba(125, 211, 252, 0.4);
+        border-radius: 50px;
+        color: #7dd3fc;
+        text-decoration: none;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .page-link:hover {
+        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
+        color: #0d1b2a;
+        transform: scale(1.05);
+        box-shadow: 0 10px 30px rgba(125, 211, 252, 0.5);
+    }
+    
+    .page-info {
+        font-family: 'Outfit', 'Inter', sans-serif;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+        padding: 0 15px;
+    }
+    
+    /* No Results */
+    .no-results,
+    .empty-search {
+        text-align: center;
+        padding: 80px 20px;
+    }
+    
+    .no-results i,
+    .empty-search i {
+        font-size: 80px;
+        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 30px;
+    }
+    
+    .no-results h3,
+    .empty-search h3 {
+        font-family: 'Orbitron', 'Syne', sans-serif;
+        font-size: 40px;
+        color: #fff;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+    }
+    
+    .no-results p,
+    .empty-search p {
+        font-family: 'Inter', sans-serif;
+        font-size: 18px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-bottom: 40px;
+    }
+    
+    .search-suggestions,
+    .quick-links {
+        max-width: 500px;
+        margin: 40px auto 0;
+        padding: 30px;
+        background: rgba(30, 42, 58, 0.6);
+        border: 2px solid rgba(125, 211, 252, 0.3);
+        border-radius: 20px;
+        text-align: left;
+    }
+    
+    .search-suggestions h4,
+    .quick-links h4 {
+        font-family: 'Orbitron', 'Syne', sans-serif;
+        font-size: 18px;
+        color: #7dd3fc;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+    }
+    
+    .search-suggestions ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .search-suggestions li {
+        padding: 10px 0;
+        font-family: 'Inter', sans-serif;
+        color: rgba(255, 255, 255, 0.8);
+        border-bottom: 1px solid rgba(125, 211, 252, 0.15);
+    }
+    
+    .search-suggestions li:last-child {
+        border-bottom: none;
+    }
+    
+    .search-suggestions a {
+        color: #90ee90;
+        text-decoration: none;
+        font-weight: 600;
+    }
+    
+    .search-suggestions a:hover {
+        text-decoration: underline;
+    }
+    
+    .quick-categories {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .quick-category {
+        padding: 12px 24px;
+        background: rgba(125, 211, 252, 0.15);
+        border: 2px solid rgba(125, 211, 252, 0.4);
+        border-radius: 50px;
+        color: #7dd3fc;
+        text-decoration: none;
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+    
+    .quick-category:hover {
+        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
+        color: #0d1b2a;
+        transform: scale(1.05);
+        box-shadow: 0 10px 25px rgba(125, 211, 252, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+        .products-grid {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .pagination {
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .no-results h3,
+        .empty-search h3 {
+            font-size: 28px;
+        }
+    }
+</style>
+{% endblock %}

@@ -4,6 +4,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, ProfileUpdateForm
+from .models import Profile
 
 
 def signup_view(request):
@@ -11,15 +12,17 @@ def signup_view(request):
     Function-based view for user registration
     """
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('products:product_list')
     
     if request.method == 'POST':
         print(request.POST)
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            messages.success(request, 'Account created successfully! Please log in.')
-            return redirect('accounts:login')
+            # Auto-login after signup
+            login(request, user)
+            messages.success(request, 'Account created successfully! Welcome to Abhirang!')
+            return redirect('products:product_list')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
@@ -33,7 +36,7 @@ def login_view(request):
     Function-based view for user login
     """
     if request.user.is_authenticated:
-        return redirect('home')
+        return redirect('products:product_list')
     
     if request.method == 'POST':
         form = CustomAuthenticationForm(request, data=request.POST)
@@ -44,7 +47,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f'Welcome back, {username}!')
-                return redirect("accounts:profile")
+                return redirect("products:product_list")
         else:
             messages.error(request, 'Invalid username or password.')
     else:
@@ -59,7 +62,7 @@ def logout_view(request):
     """
     logout(request)
     messages.info(request, 'You have been logged out successfully.')
-    return redirect('accounts:login')
+    return redirect('products:product_list')
 
 
 @login_required

@@ -44,8 +44,9 @@ def create_user_profile(sender, instance, created, **kwargs):
     if created:
         Profile.objects.create(user=instance)
 
-
 @receiver(post_save, sender=User)
-def save_user_profile(sender, instance, **kwargs):
-    """Save the Profile instance when the User is saved"""
-    instance.profile.save()
+def send_mail_reciever(sender, instance, **kwargs):
+    """Send welcome email when a new user is created"""
+    if kwargs.get('created', False):
+        # Logic to send email goes here
+        pass
