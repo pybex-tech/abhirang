@@ -3,6 +3,7 @@ from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.views import View
 from .forms import CustomUserCreationForm, CustomAuthenticationForm, ProfileUpdateForm
 from .models import Profile
 
@@ -29,7 +30,6 @@ def signup_view(request):
         form = CustomUserCreationForm()
     
     return render(request, 'accounts/signup.html', {'form': form, 'title': 'Sign Up'})
-
 
 def login_view(request):
     """

@@ -106,12 +106,6 @@ class Product(models.Model):
         """Return total number of images for the product"""
         return cls.objects.count()
 
-# Product.total_products()
-
-# pr = Product.objects.get(id=1)
-# pr.final_price
-# pr.in_stock
-# pr.get_available_sizes_list()
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
