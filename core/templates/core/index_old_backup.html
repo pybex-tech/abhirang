@@ -109,8 +109,6 @@
         border-radius: 12px;
         overflow: hidden;
         transition: all 0.2s ease;
-        text-decoration: none;
-        display: block;
     }
     
     .collection-card:hover {
@@ -309,37 +307,37 @@
         </div>
         
         <div class="collections-grid">
-            <a href="{% url 'products:category_list' %}" class="collection-card">
+            <div class="collection-card">
                 <img src="https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=300&fit=crop" alt="Abstract Art" class="collection-image">
                 <div class="collection-info">
                     <h3 class="collection-name">Abstract Art</h3>
                     <p class="collection-desc">Bold, vibrant abstract designs</p>
                 </div>
-            </a>
+            </div>
             
-            <a href="{% url 'products:category_list' %}" class="collection-card">
+            <div class="collection-card">
                 <img src="https://images.unsplash.com/photo-1618354691373-d851c5c3a990?w=400&h=300&fit=crop" alt="Minimalist" class="collection-image">
                 <div class="collection-info">
                     <h3 class="collection-name">Minimalist</h3>
                     <p class="collection-desc">Clean and simple designs</p>
                 </div>
-            </a>
+            </div>
             
-            <a href="{% url 'products:category_list' %}" class="collection-card">
+            <div class="collection-card">
                 <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=400&h=300&fit=crop" alt="Nature" class="collection-image">
                 <div class="collection-info">
                     <h3 class="collection-name">Nature</h3>
                     <p class="collection-desc">Nature-inspired prints</p>
                 </div>
-            </a>
+            </div>
             
-            <a href="{% url 'products:category_list' %}" class="collection-card">
+            <div class="collection-card">
                 <img src="https://images.unsplash.com/photo-1576566588028-4147f3842f27?w=400&h=300&fit=crop" alt="Typography" class="collection-image">
                 <div class="collection-info">
                     <h3 class="collection-name">Typography</h3>
                     <p class="collection-desc">Inspiring quotes and text</p>
                 </div>
-            </a>
+            </div>
         </div>
     </div>
 </section>

@@ -1,66 +1,1590 @@
-{% extends 'accounts/base.html' %}
+{% extends 'core/base.html' %}{% extends 'core/base.html' %}{% extends 'accounts/base.html' %}
+
 {% load static %}
 
-{% block content %}
-<div class="profile-header">
-    {% if user.profile.profile_picture %}
-        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
-    {% else %}
-        <img src="{% static 'accounts/images/default-avatar.png' %}" alt="Profile Picture" class="profile-picture" onerror="this.style.display='none'">
-    {% endif %}
-    <h2 class="profile-username">{{ user.username }}</h2>
-    <p class="profile-email">{{ user.email }}</p>
-</div>
+{% load static %}{% load static %}
 
-<div class="profile-info">
-    <h3 style="margin-bottom: 20px; color: #333;">Profile Information</h3>
-    
-    <div class="info-row">
-        <span class="info-label">Username:</span>
-        <span class="info-value">{{ user.username }}</span>
-    </div>
-    
-    <div class="info-row">
-        <span class="info-label">Email:</span>
-        <span class="info-value">{{ user.email }}</span>
-    </div>
-    
-    <div class="info-row">
-        <span class="info-label">Date Joined:</span>
-        <span class="info-value">{{ user.date_joined|date:"F d, Y" }}</span>
-    </div>
-    
-    {% if user.profile.bio %}
-    <div class="info-row">
-        <span class="info-label">Bio:</span>
-        <span class="info-value">{{ user.profile.bio }}</span>
-    </div>
-    {% endif %}
-    
-    {% if user.profile.gender %}
-    <div class="info-row">
-        <span class="info-label">Gender:</span>
-        <span class="info-value">{{ user.profile.get_gender_display }}</span>
-    </div>
-    {% endif %}
-    
-    {% if user.profile.address_line1 %}
-    <div class="info-row">
-        <span class="info-label">Address:</span>
-        <span class="info-value">
-            {{ user.profile.address_line1 }}
-            {% if user.profile.address_line2 %}, {{ user.profile.address_line2 }}{% endif %}
-            <br>
-            {{ user.profile.city }}{% if user.profile.state %}, {{ user.profile.state }}{% endif %} {{ user.profile.postal_code }}
-            <br>
-            {{ user.profile.country }}
-        </span>
-    </div>
-    {% endif %}
-</div>
+{% block extra_css %}
 
-<div style="display: flex; gap: 10px; margin-top: 20px;">
-    <a href="#" class="btn btn-primary" style="flex: 1;">Edit Profile</a>
-    <a href="{% url 'accounts:logout' %}" class="btn btn-secondary" style="flex: 1;">Logout</a>
+<style>
+
+    .profile-container {
+
+        max-width: 1200px;{% block extra_css %}{% block content %}
+
+        margin: 0 auto;
+
+        padding: 40px 20px;<style><div class="profile-header">
+
+    }
+
+    .profile-container {    {% if user.profile.profile_picture %}
+
+    .profile-header {
+
+        background: #ffffff;        max-width: 1200px;        <img src="{{ user.profile.profile_picture.url }}" alt="Profile Picture" class="profile-picture">
+
+        border: 1px solid #e5e7eb;
+
+        border-radius: 12px;        margin: 0 auto;    {% else %}
+
+        padding: 32px;
+
+        margin-bottom: 24px;        padding: 40px 20px;        <img src="{% static 'accounts/images/default-avatar.png' %}" alt="Profile Picture" class="profile-picture" onerror="this.style.display='none'">
+
+        display: flex;
+
+        align-items: center;    }    {% endif %}
+
+        gap: 24px;
+
+    }        <h2 class="profile-username">{{ user.username }}</h2>
+
+
+
+    .profile-avatar {    .profile-header {    <p class="profile-email">{{ user.email }}</p>
+
+        width: 100px;
+
+        height: 100px;        background: #ffffff;</div>
+
+        border-radius: 50%;
+
+        object-fit: cover;        border: 1px solid #e5e7eb;
+
+        border: 3px solid #e5e7eb;
+
+    }        border-radius: 12px;<div class="profile-info">
+
+
+
+    .profile-avatar-placeholder {        padding: 32px;    <h3 style="margin-bottom: 20px; color: #333;">Profile Information</h3>
+
+        width: 100px;
+
+        height: 100px;        margin-bottom: 24px;    
+
+        border-radius: 50%;
+
+        background: #f9fafb;        display: flex;    <div class="info-row">
+
+        border: 3px solid #e5e7eb;
+
+        display: flex;        align-items: center;        <span class="info-label">Username:</span>
+
+        align-items: center;
+
+        justify-content: center;        gap: 24px;        <span class="info-value">{{ user.username }}</span>
+
+        font-size: 36px;
+
+        font-weight: 700;    }    </div>
+
+        color: #6b7280;
+
+    }        
+
+
+
+    .profile-header-info h1 {    .profile-avatar {    <div class="info-row">
+
+        font-size: 28px;
+
+        font-weight: 700;        width: 100px;        <span class="info-label">Email:</span>
+
+        color: #1a1a1a;
+
+        margin-bottom: 4px;        height: 100px;        <span class="info-value">{{ user.email }}</span>
+
+    }
+
+        border-radius: 50%;    </div>
+
+    .profile-header-info p {
+
+        color: #6b7280;        object-fit: cover;    
+
+        font-size: 14px;
+
+    }        border: 3px solid #e5e7eb;    <div class="info-row">
+
+
+
+    .profile-tabs {    }        <span class="info-label">Date Joined:</span>
+
+        display: flex;
+
+        gap: 8px;            <span class="info-value">{{ user.date_joined|date:"F d, Y" }}</span>
+
+        margin-bottom: 24px;
+
+        border-bottom: 1px solid #e5e7eb;    .profile-avatar-placeholder {    </div>
+
+        overflow-x: auto;
+
+    }        width: 100px;    
+
+
+
+    .profile-tab {        height: 100px;    {% if user.profile.bio %}
+
+        padding: 12px 24px;
+
+        background: transparent;        border-radius: 50%;    <div class="info-row">
+
+        border: none;
+
+        border-bottom: 2px solid transparent;        background: #f9fafb;        <span class="info-label">Bio:</span>
+
+        color: #6b7280;
+
+        font-size: 14px;        border: 3px solid #e5e7eb;        <span class="info-value">{{ user.profile.bio }}</span>
+
+        font-weight: 500;
+
+        cursor: pointer;        display: flex;    </div>
+
+        transition: all 0.2s;
+
+        text-decoration: none;        align-items: center;    {% endif %}
+
+        white-space: nowrap;
+
+    }        justify-content: center;    
+
+
+
+    .profile-tab:hover {        font-size: 36px;    {% if user.profile.gender %}
+
+        color: #1a1a1a;
+
+        background: #f9fafb;        font-weight: 700;    <div class="info-row">
+
+    }
+
+        color: #6b7280;        <span class="info-label">Gender:</span>
+
+    .profile-tab.active {
+
+        color: #1a1a1a;    }        <span class="info-value">{{ user.profile.get_gender_display }}</span>
+
+        border-bottom-color: #1a1a1a;
+
+    }        </div>
+
+
+
+    .profile-content {    .profile-header-info h1 {    {% endif %}
+
+        background: #ffffff;
+
+        border: 1px solid #e5e7eb;        font-size: 28px;    
+
+        border-radius: 12px;
+
+        padding: 32px;        font-weight: 700;    {% if user.profile.address_line1 %}
+
+    }
+
+        color: #1a1a1a;    <div class="info-row">
+
+    .profile-section {
+
+        margin-bottom: 32px;        margin-bottom: 4px;        <span class="info-label">Address:</span>
+
+    }
+
+    }        <span class="info-value">
+
+    .profile-section:last-child {
+
+        margin-bottom: 0;                {{ user.profile.address_line1 }}
+
+    }
+
+    .profile-header-info p {            {% if user.profile.address_line2 %}, {{ user.profile.address_line2 }}{% endif %}
+
+    .profile-section h2 {
+
+        font-size: 20px;        color: #6b7280;            <br>
+
+        font-weight: 600;
+
+        color: #1a1a1a;        font-size: 14px;            {{ user.profile.city }}{% if user.profile.state %}, {{ user.profile.state }}{% endif %} {{ user.profile.postal_code }}
+
+        margin-bottom: 16px;
+
+    }    }            <br>
+
+
+
+    .info-grid {                {{ user.profile.country }}
+
+        display: grid;
+
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));    .profile-tabs {        </span>
+
+        gap: 20px;
+
+    }        background: #ffffff;    </div>
+
+
+
+    .info-item {        border: 1px solid #e5e7eb;    {% endif %}
+
+        display: flex;
+
+        flex-direction: column;        border-radius: 12px;</div>
+
+        gap: 4px;
+
+    }        padding: 16px;
+
+
+
+    .info-label {        margin-bottom: 24px;<div style="display: flex; gap: 10px; margin-top: 20px;">
+
+        font-size: 12px;
+
+        font-weight: 500;        display: flex;    <a href="#" class="btn btn-primary" style="flex: 1;">Edit Profile</a>
+
+        color: #6b7280;
+
+        text-transform: uppercase;        gap: 8px;    <a href="{% url 'accounts:logout' %}" class="btn btn-secondary" style="flex: 1;">Logout</a>
+
+        letter-spacing: 0.5px;
+
+    }        overflow-x: auto;</div>
+
+
+
+    .info-value {    }{% endblock %}
+
+        font-size: 14px;
+
+        color: #1a1a1a;    
+
+    }    .profile-tab {
+
+        padding: 10px 20px;
+
+    .profile-form {        border: none;
+
+        max-width: 600px;        background: #f9fafb;
+
+    }        color: #6b7280;
+
+        font-size: 14px;
+
+    .form-group {        font-weight: 600;
+
+        margin-bottom: 20px;        border-radius: 8px;
+
+    }        cursor: pointer;
+
+        transition: all 0.2s ease;
+
+    .form-group label {        white-space: nowrap;
+
+        display: block;        text-decoration: none;
+
+        font-size: 14px;        display: inline-block;
+
+        font-weight: 500;    }
+
+        color: #1a1a1a;    
+
+        margin-bottom: 8px;    .profile-tab:hover {
+
+    }        background: #e5e7eb;
+
+        color: #1a1a1a;
+
+    .form-group input,    }
+
+    .form-group textarea,    
+
+    .form-group select {    .profile-tab.active {
+
+        width: 100%;        background: #1a1a1a;
+
+        padding: 10px 14px;        color: #ffffff;
+
+        border: 1px solid #e5e7eb;    }
+
+        border-radius: 6px;    
+
+        font-size: 14px;    .profile-content {
+
+        color: #1a1a1a;        background: #ffffff;
+
+        transition: border-color 0.2s;        border: 1px solid #e5e7eb;
+
+    }        border-radius: 12px;
+
+        padding: 32px;
+
+    .form-group input:focus,    }
+
+    .form-group textarea:focus,    
+
+    .form-group select:focus {    .section-title {
+
+        outline: none;        font-size: 20px;
+
+        border-color: #1a1a1a;        font-weight: 700;
+
+    }        color: #1a1a1a;
+
+        margin-bottom: 24px;
+
+    .form-group textarea {        padding-bottom: 16px;
+
+        resize: vertical;        border-bottom: 1px solid #e5e7eb;
+
+        min-height: 100px;    }
+
+    }    
+
+    .form-group {
+
+    .btn {        margin-bottom: 20px;
+
+        padding: 10px 20px;    }
+
+        border: 1px solid #1a1a1a;    
+
+        border-radius: 6px;    .form-group label {
+
+        background: #1a1a1a;        display: block;
+
+        color: #ffffff;        font-size: 14px;
+
+        font-size: 14px;        font-weight: 600;
+
+        font-weight: 500;        color: #374151;
+
+        cursor: pointer;        margin-bottom: 8px;
+
+        transition: all 0.2s;    }
+
+    }    
+
+    .form-group input,
+
+    .btn:hover {    .form-group select,
+
+        background: #000000;    .form-group textarea {
+
+        border-color: #000000;        width: 100%;
+
+    }        padding: 10px 14px;
+
+        border: 1px solid #d1d5db;
+
+    .btn-secondary {        border-radius: 8px;
+
+        background: #ffffff;        font-size: 14px;
+
+        color: #1a1a1a;        color: #1a1a1a;
+
+        border: 1px solid #e5e7eb;        background: #ffffff;
+
+    }        transition: all 0.2s ease;
+
+    }
+
+    .btn-secondary:hover {    
+
+        background: #f9fafb;    .form-group input:focus,
+
+        border-color: #1a1a1a;    .form-group select:focus,
+
+    }    .form-group textarea:focus {
+
+        outline: none;
+
+    .btn-danger {        border-color: #6b7280;
+
+        background: #dc2626;        box-shadow: 0 0 0 3px rgba(107, 114, 128, 0.1);
+
+        border-color: #dc2626;    }
+
+        color: #ffffff;    
+
+    }    .form-row {
+
+        display: grid;
+
+    .btn-danger:hover {        grid-template-columns: repeat(2, 1fr);
+
+        background: #b91c1c;        gap: 16px;
+
+        border-color: #b91c1c;    }
+
+    }    
+
+    .btn-primary {
+
+    .address-card {        background: #1a1a1a;
+
+        border: 1px solid #e5e7eb;        color: #ffffff;
+
+        border-radius: 8px;        padding: 12px 24px;
+
+        padding: 20px;        border: none;
+
+        margin-bottom: 16px;        border-radius: 8px;
+
+        position: relative;        font-size: 14px;
+
+    }        font-weight: 600;
+
+        cursor: pointer;
+
+    .address-card.default {        transition: all 0.2s ease;
+
+        border-color: #1a1a1a;    }
+
+        background: #f9fafb;    
+
+    }    .btn-primary:hover {
+
+        background: #000000;
+
+    .address-badge {    }
+
+        position: absolute;    
+
+        top: 16px;    .btn-secondary {
+
+        right: 16px;        background: #f9fafb;
+
+        padding: 4px 12px;        color: #1a1a1a;
+
+        background: #1a1a1a;        padding: 12px 24px;
+
+        color: #ffffff;        border: 1px solid #e5e7eb;
+
+        font-size: 11px;        border-radius: 8px;
+
+        font-weight: 600;        font-size: 14px;
+
+        border-radius: 4px;        font-weight: 600;
+
+        text-transform: uppercase;        cursor: pointer;
+
+        letter-spacing: 0.5px;        transition: all 0.2s ease;
+
+    }    }
+
+    
+
+    .address-type {    .btn-secondary:hover {
+
+        font-size: 12px;        background: #e5e7eb;
+
+        font-weight: 600;    }
+
+        color: #6b7280;    
+
+        text-transform: uppercase;    .btn-danger {
+
+        margin-bottom: 8px;        background: #fee2e2;
+
+    }        color: #dc2626;
+
+        padding: 8px 16px;
+
+    .address-name {        border: 1px solid #fecaca;
+
+        font-size: 16px;        border-radius: 6px;
+
+        font-weight: 600;        font-size: 13px;
+
+        color: #1a1a1a;        font-weight: 600;
+
+        margin-bottom: 4px;        cursor: pointer;
+
+    }        transition: all 0.2s ease;
+
+    }
+
+    .address-details {    
+
+        font-size: 14px;    .btn-danger:hover {
+
+        color: #6b7280;        background: #fecaca;
+
+        line-height: 1.6;    }
+
+        margin-bottom: 12px;    
+
+    }    .address-card {
+
+        background: #f9fafb;
+
+    .address-actions {        border: 1px solid #e5e7eb;
+
+        display: flex;        border-radius: 8px;
+
+        gap: 12px;        padding: 20px;
+
+        margin-top: 12px;        margin-bottom: 16px;
+
+    }        position: relative;
+
+    }
+
+    .order-card {    
+
+        border: 1px solid #e5e7eb;    .address-card.default {
+
+        border-radius: 8px;        border-color: #1a1a1a;
+
+        padding: 20px;        border-width: 2px;
+
+        margin-bottom: 16px;    }
+
+    }    
+
+    .address-badge {
+
+    .order-header {        display: inline-block;
+
+        display: flex;        padding: 4px 12px;
+
+        justify-content: space-between;        background: #1a1a1a;
+
+        align-items: start;        color: #ffffff;
+
+        margin-bottom: 16px;        border-radius: 6px;
+
+        padding-bottom: 16px;        font-size: 12px;
+
+        border-bottom: 1px solid #e5e7eb;        font-weight: 600;
+
+    }        margin-bottom: 12px;
+
+    }
+
+    .order-number {    
+
+        font-size: 14px;    .address-card h4 {
+
+        font-weight: 600;        font-size: 16px;
+
+        color: #1a1a1a;        font-weight: 600;
+
+        margin-bottom: 4px;        color: #1a1a1a;
+
+    }        margin-bottom: 8px;
+
+    }
+
+    .order-date {    
+
+        font-size: 12px;    .address-card p {
+
+        color: #6b7280;        font-size: 14px;
+
+    }        color: #6b7280;
+
+        line-height: 1.6;
+
+    .order-status {        margin-bottom: 4px;
+
+        padding: 4px 12px;    }
+
+        border-radius: 4px;    
+
+        font-size: 12px;    .address-actions {
+
+        font-weight: 600;        display: flex;
+
+        text-transform: uppercase;        gap: 8px;
+
+    }        margin-top: 12px;
+
+    }
+
+    .order-status.pending {    
+
+        background: #fef3c7;    .order-card {
+
+        color: #92400e;        background: #f9fafb;
+
+    }        border: 1px solid #e5e7eb;
+
+        border-radius: 8px;
+
+    .order-status.processing {        padding: 20px;
+
+        background: #dbeafe;        margin-bottom: 16px;
+
+        color: #1e40af;    }
+
+    }    
+
+    .order-header {
+
+    .order-status.shipped {        display: flex;
+
+        background: #ddd6fe;        justify-content: space-between;
+
+        color: #5b21b6;        align-items: start;
+
+    }        margin-bottom: 16px;
+
+        padding-bottom: 16px;
+
+    .order-status.delivered {        border-bottom: 1px solid #e5e7eb;
+
+        background: #d1fae5;    }
+
+        color: #065f46;    
+
+    }    .order-id {
+
+        font-size: 14px;
+
+    .order-items {        font-weight: 600;
+
+        margin-bottom: 16px;        color: #1a1a1a;
+
+    }    }
+
+    
+
+    .order-item {    .order-date {
+
+        display: flex;        font-size: 13px;
+
+        align-items: center;        color: #6b7280;
+
+        gap: 12px;    }
+
+        padding: 8px 0;    
+
+    }    .order-status {
+
+        display: inline-block;
+
+    .order-item-image {        padding: 4px 12px;
+
+        width: 60px;        border-radius: 6px;
+
+        height: 60px;        font-size: 12px;
+
+        border-radius: 6px;        font-weight: 600;
+
+        object-fit: cover;    }
+
+        border: 1px solid #e5e7eb;    
+
+    }    .status-pending {
+
+        background: #fef3c7;
+
+    .order-item-info {        color: #d97706;
+
+        flex: 1;    }
+
+    }    
+
+    .status-completed {
+
+    .order-item-name {        background: #d1fae5;
+
+        font-size: 14px;        color: #059669;
+
+        font-weight: 500;    }
+
+        color: #1a1a1a;    
+
+        margin-bottom: 2px;    .status-cancelled {
+
+    }        background: #fee2e2;
+
+        color: #dc2626;
+
+    .order-item-quantity {    }
+
+        font-size: 12px;    
+
+        color: #6b7280;    .empty-state {
+
+    }        text-align: center;
+
+        padding: 60px 20px;
+
+    .order-total {    }
+
+        text-align: right;    
+
+        font-size: 16px;    .empty-state i {
+
+        font-weight: 600;        font-size: 64px;
+
+        color: #1a1a1a;        color: #d1d5db;
+
+    }        margin-bottom: 16px;
+
+    }
+
+    .empty-state {    
+
+        text-align: center;    .empty-state h3 {
+
+        padding: 60px 20px;        font-size: 20px;
+
+    }        font-weight: 600;
+
+        color: #1a1a1a;
+
+    .empty-state i {        margin-bottom: 8px;
+
+        font-size: 64px;    }
+
+        color: #e5e7eb;    
+
+        margin-bottom: 16px;    .empty-state p {
+
+    }        font-size: 14px;
+
+        color: #6b7280;
+
+    .empty-state h3 {        margin-bottom: 24px;
+
+        font-size: 18px;    }
+
+        font-weight: 600;    
+
+        color: #1a1a1a;    .alert {
+
+        margin-bottom: 8px;        padding: 12px 16px;
+
+    }        border-radius: 8px;
+
+        margin-bottom: 20px;
+
+    .empty-state p {        font-size: 14px;
+
+        font-size: 14px;    }
+
+        color: #6b7280;    
+
+    }    .alert-success {
+
+        background: #d1fae5;
+
+    .modal {        color: #059669;
+
+        display: none;        border: 1px solid #a7f3d0;
+
+        position: fixed;    }
+
+        top: 0;    
+
+        left: 0;    .alert-error {
+
+        right: 0;        background: #fee2e2;
+
+        bottom: 0;        color: #dc2626;
+
+        background: rgba(0, 0, 0, 0.5);        border: 1px solid #fecaca;
+
+        z-index: 1000;    }
+
+        align-items: center;    
+
+        justify-content: center;    .modal {
+
+    }        display: none;
+
+        position: fixed;
+
+    .modal.active {        top: 0;
+
+        display: flex;        left: 0;
+
+    }        width: 100%;
+
+        height: 100%;
+
+    .modal-content {        background: rgba(0,0,0,0.5);
+
+        background: #ffffff;        align-items: center;
+
+        border-radius: 12px;        justify-content: center;
+
+        max-width: 600px;        z-index: 1000;
+
+        width: 90%;    }
+
+        max-height: 90vh;    
+
+        overflow-y: auto;    .modal-content {
+
+        padding: 32px;        background: white;
+
+    }        border-radius: 12px;
+
+        padding: 32px;
+
+    .modal-header {        max-width: 600px;
+
+        display: flex;        width: 90%;
+
+        justify-content: space-between;        max-height: 90vh;
+
+        align-items: center;        overflow-y: auto;
+
+        margin-bottom: 24px;    }
+
+    }    
+
+    @media (max-width: 768px) {
+
+    .modal-header h2 {        .profile-header {
+
+        font-size: 20px;            flex-direction: column;
+
+        font-weight: 600;            text-align: center;
+
+        color: #1a1a1a;        }
+
+    }        
+
+        .form-row {
+
+    .modal-close {            grid-template-columns: 1fr;
+
+        background: none;        }
+
+        border: none;        
+
+        font-size: 24px;        .profile-tabs {
+
+        color: #6b7280;            flex-wrap: nowrap;
+
+        cursor: pointer;        }
+
+        padding: 0;    }
+
+        width: 32px;</style>
+
+        height: 32px;{% endblock %}
+
+        display: flex;
+
+        align-items: center;{% block content %}
+
+        justify-content: center;<div class="profile-container">
+
+    }    <!-- Profile Header -->
+
+    <div class="profile-header">
+
+    .modal-close:hover {        {% if user.profile.profile_picture %}
+
+        color: #1a1a1a;            <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}" class="profile-avatar">
+
+    }        {% else %}
+
+            <div class="profile-avatar-placeholder">
+
+    .messages {                {{ user.username.0|upper }}
+
+        margin-bottom: 24px;            </div>
+
+    }        {% endif %}
+
+        <div class="profile-header-info">
+
+    .alert {            <h1>{{ user.get_full_name|default:user.username }}</h1>
+
+        padding: 12px 16px;            <p>{{ user.email }}</p>
+
+        border-radius: 8px;            <p style="margin-top: 4px; font-size: 13px;">Member since {{ user.date_joined|date:"F Y" }}</p>
+
+        margin-bottom: 12px;        </div>
+
+        font-size: 14px;    </div>
+
+    }    
+
+    <!-- Messages -->
+
+    .alert-success {    {% if messages %}
+
+        background: #d1fae5;        {% for message in messages %}
+
+        color: #065f46;        <div class="alert alert-{{ message.tags }}">
+
+        border: 1px solid #10b981;            {{ message }}
+
+    }        </div>
+
+        {% endfor %}
+
+    .alert-error {    {% endif %}
+
+        background: #fee2e2;    
+
+        color: #991b1b;    <!-- Profile Tabs -->
+
+        border: 1px solid #ef4444;    <div class="profile-tabs">
+
+    }        <a href="?tab=overview" class="profile-tab {% if active_tab == 'overview' %}active{% endif %}">
+
+            <i class="fas fa-user"></i> Overview
+
+    @media (max-width: 768px) {        </a>
+
+        .profile-header {        <a href="?tab=personal" class="profile-tab {% if active_tab == 'personal' %}active{% endif %}">
+
+            flex-direction: column;            <i class="fas fa-id-card"></i> Personal Info
+
+            text-align: center;        </a>
+
+        }        <a href="?tab=security" class="profile-tab {% if active_tab == 'security' %}active{% endif %}">
+
+            <i class="fas fa-lock"></i> Security
+
+        .info-grid {        </a>
+
+            grid-template-columns: 1fr;        <a href="?tab=addresses" class="profile-tab {% if active_tab == 'addresses' %}active{% endif %}">
+
+        }            <i class="fas fa-map-marker-alt"></i> Addresses
+
+        </a>
+
+        .profile-tabs {        <a href="?tab=orders" class="profile-tab {% if active_tab == 'orders' %}active{% endif %}">
+
+            flex-wrap: nowrap;            <i class="fas fa-shopping-bag"></i> Orders
+
+        }        </a>
+
+    }    </div>
+
+</style>    
+
+{% endblock %}    <!-- Profile Content -->
+
+    <div class="profile-content">
+
+{% block content %}        {% if active_tab == 'overview' %}
+
+<div class="profile-container">            <!-- Overview Tab -->
+
+    <!-- Profile Header -->            <h2 class="section-title">Profile Overview</h2>
+
+    <div class="profile-header">            
+
+        {% if user.profile.profile_picture %}            <div class="form-group">
+
+            <img src="{{ user.profile.profile_picture.url }}" alt="{{ user.username }}" class="profile-avatar">                <label>Full Name</label>
+
+        {% else %}                <input type="text" value="{{ user.get_full_name|default:'Not set' }}" readonly>
+
+            <div class="profile-avatar-placeholder">            </div>
+
+                {{ user.username.0|upper }}            
+
+            </div>            <div class="form-row">
+
+        {% endif %}                <div class="form-group">
+
+                            <label>Email</label>
+
+        <div class="profile-header-info">                    <input type="email" value="{{ user.email }}" readonly>
+
+            <h1>{{ user.get_full_name|default:user.username }}</h1>                </div>
+
+            <p>{{ user.email }}</p>                <div class="form-group">
+
+        </div>                    <label>Username</label>
+
+    </div>                    <input type="text" value="{{ user.username }}" readonly>
+
+                </div>
+
+    <!-- Messages -->            </div>
+
+    {% if messages %}            
+
+        <div class="messages">            {% if user.profile.bio %}
+
+            {% for message in messages %}            <div class="form-group">
+
+                <div class="alert alert-{{ message.tags }}">                <label>Bio</label>
+
+                    {{ message }}                <textarea readonly>{{ user.profile.bio }}</textarea>
+
+                </div>            </div>
+
+            {% endfor %}            {% endif %}
+
+        </div>            
+
+    {% endif %}            <div class="form-row">
+
+                {% if user.profile.gender %}
+
+    <!-- Tabs Navigation -->                <div class="form-group">
+
+    <div class="profile-tabs">                    <label>Gender</label>
+
+        <a href="?tab=overview" class="profile-tab {% if active_tab == 'overview' %}active{% endif %}">                    <input type="text" value="{{ user.profile.get_gender_display }}" readonly>
+
+            <i class="fas fa-home"></i> Overview                </div>
+
+        </a>                {% endif %}
+
+        <a href="?tab=personal" class="profile-tab {% if active_tab == 'personal' %}active{% endif %}">                <div class="form-group">
+
+            <i class="fas fa-user"></i> Personal Info                    <label>Member Since</label>
+
+        </a>                    <input type="text" value="{{ user.date_joined|date:'F d, Y' }}" readonly>
+
+        <a href="?tab=security" class="profile-tab {% if active_tab == 'security' %}active{% endif %}">                </div>
+
+            <i class="fas fa-lock"></i> Security            </div>
+
+        </a>            
+
+        <a href="?tab=addresses" class="profile-tab {% if active_tab == 'addresses' %}active{% endif %}">        {% elif active_tab == 'personal' %}
+
+            <i class="fas fa-map-marker-alt"></i> Addresses            <!-- Personal Info Tab -->
+
+        </a>            <h2 class="section-title">Personal Information</h2>
+
+        <a href="?tab=orders" class="profile-tab {% if active_tab == 'orders' %}active{% endif %}">            
+
+            <i class="fas fa-shopping-bag"></i> Orders            <form method="post" enctype="multipart/form-data">
+
+        </a>                {% csrf_token %}
+
+    </div>                
+
+                <div class="form-group">
+
+    <!-- Tab Content -->                    <label>Profile Picture</label>
+
+    <div class="profile-content">                    <input type="file" name="profile_picture" accept="image/*">
+
+        {% if active_tab == 'overview' %}                    {% if user.profile.profile_picture %}
+
+            <!-- Overview Tab -->                        <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Current: {{ user.profile.profile_picture.name }}</p>
+
+            <div class="profile-section">                    {% endif %}
+
+                <h2>Account Information</h2>                </div>
+
+                <div class="info-grid">                
+
+                    <div class="info-item">                <div class="form-row">
+
+                        <span class="info-label">Username</span>                    <div class="form-group">
+
+                        <span class="info-value">{{ user.username }}</span>                        <label>First Name</label>
+
+                    </div>                        <input type="text" name="first_name" value="{{ user.first_name }}" placeholder="Enter first name">
+
+                    <div class="info-item">                    </div>
+
+                        <span class="info-label">Email</span>                    <div class="form-group">
+
+                        <span class="info-value">{{ user.email }}</span>                        <label>Last Name</label>
+
+                    </div>                        <input type="text" name="last_name" value="{{ user.last_name }}" placeholder="Enter last name">
+
+                    <div class="info-item">                    </div>
+
+                        <span class="info-label">Full Name</span>                </div>
+
+                        <span class="info-value">{{ user.get_full_name|default:"Not set" }}</span>                
+
+                    </div>                <div class="form-group">
+
+                    <div class="info-item">                    <label>Bio</label>
+
+                        <span class="info-label">Date Joined</span>                    <textarea name="bio" rows="4" placeholder="Tell us about yourself...">{{ user.profile.bio }}</textarea>
+
+                        <span class="info-value">{{ user.date_joined|date:"F d, Y" }}</span>                </div>
+
+                    </div>                
+
+                </div>                <div class="form-group">
+
+            </div>                    <label>Gender</label>
+
+                    <select name="gender">
+
+            {% if user.profile %}                        <option value="">Select gender</option>
+
+                <div class="profile-section">                        <option value="M" {% if user.profile.gender == 'M' %}selected{% endif %}>Male</option>
+
+                    <h2>Profile Details</h2>                        <option value="F" {% if user.profile.gender == 'F' %}selected{% endif %}>Female</option>
+
+                    <div class="info-grid">                        <option value="O" {% if user.profile.gender == 'O' %}selected{% endif %}>Other</option>
+
+                        <div class="info-item">                        <option value="N" {% if user.profile.gender == 'N' %}selected{% endif %}>Prefer not to say</option>
+
+                            <span class="info-label">Gender</span>                    </select>
+
+                            <span class="info-value">{{ user.profile.get_gender_display|default:"Not set" }}</span>                </div>
+
+                        </div>                
+
+                        <div class="info-item">                <button type="submit" class="btn-primary">Save Changes</button>
+
+                            <span class="info-label">Phone</span>            </form>
+
+                            <span class="info-value">{{ user.profile.phone|default:"Not set" }}</span>            
+
+                        </div>        {% elif active_tab == 'security' %}
+
+                        {% if user.profile.bio %}            <!-- Security Tab -->
+
+                            <div class="info-item" style="grid-column: 1 / -1;">            <h2 class="section-title">Security Settings</h2>
+
+                                <span class="info-label">Bio</span>            
+
+                                <span class="info-value">{{ user.profile.bio }}</span>            <!-- Change Email -->
+
+                            </div>            <div style="margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid #e5e7eb;">
+
+                        {% endif %}                <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Email Address</h3>
+
+                    </div>                <form method="post" action="{% url 'accounts:change_email' %}">
+
+                </div>                    {% csrf_token %}
+
+            {% endif %}                    <div class="form-group">
+
+                        <label>Email</label>
+
+        {% elif active_tab == 'personal' %}                        <input type="email" name="email" value="{{ user.email }}" required>
+
+            <!-- Personal Info Tab -->                    </div>
+
+            <div class="profile-section">                    <button type="submit" class="btn-primary">Update Email</button>
+
+                <h2>Edit Personal Information</h2>                </form>
+
+                <form method="post" enctype="multipart/form-data" class="profile-form">            </div>
+
+                    {% csrf_token %}            
+
+                                <!-- Change Password -->
+
+                    <div class="form-group">            <div>
+
+                        <label for="first_name">First Name</label>                <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px;">Password</h3>
+
+                        <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}">                <form method="post" action="{% url 'accounts:change_password' %}">
+
+                    </div>                    {% csrf_token %}
+
+                    <div class="form-group">
+
+                    <div class="form-group">                        <label>Current Password</label>
+
+                        <label for="last_name">Last Name</label>                        <input type="password" name="old_password" required>
+
+                        <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}">                    </div>
+
+                    </div>                    <div class="form-group">
+
+                        <label>New Password</label>
+
+                    <div class="form-group">                        <input type="password" name="new_password1" required>
+
+                        <label for="phone">Phone</label>                    </div>
+
+                        <input type="text" id="phone" name="phone" value="{{ user.profile.phone|default:'' }}">                    <div class="form-group">
+
+                    </div>                        <label>Confirm New Password</label>
+
+                        <input type="password" name="new_password2" required>
+
+                    <div class="form-group">                    </div>
+
+                        <label for="bio">Bio</label>                    <button type="submit" class="btn-primary">Change Password</button>
+
+                        <textarea id="bio" name="bio">{{ user.profile.bio|default:'' }}</textarea>                </form>
+
+                    </div>            </div>
+
+            
+
+                    <div class="form-group">        {% elif active_tab == 'addresses' %}
+
+                        <label for="gender">Gender</label>            <!-- Addresses Tab -->
+
+                        <select id="gender" name="gender">            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+
+                            <option value="">Select Gender</option>                <h2 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0;">Saved Addresses</h2>
+
+                            <option value="M" {% if user.profile.gender == 'M' %}selected{% endif %}>Male</option>                <button onclick="document.getElementById('addAddressModal').style.display='flex'" class="btn-primary">
+
+                            <option value="F" {% if user.profile.gender == 'F' %}selected{% endif %}>Female</option>                    <i class="fas fa-plus"></i> Add Address
+
+                            <option value="O" {% if user.profile.gender == 'O' %}selected{% endif %}>Other</option>                </button>
+
+                        </select>            </div>
+
+                    </div>            
+
+            {% if addresses %}
+
+                    <div class="form-group">                {% for address in addresses %}
+
+                        <label for="profile_picture">Profile Picture</label>                <div class="address-card {% if address.is_default %}default{% endif %}">
+
+                        <input type="file" id="profile_picture" name="profile_picture" accept="image/*">                    {% if address.is_default %}
+
+                    </div>                        <span class="address-badge">Default</span>
+
+                    {% endif %}
+
+                    <button type="submit" class="btn">Save Changes</button>                    <span class="address-badge" style="background: #f9fafb; color: #6b7280; border: 1px solid #e5e7eb; margin-left: 8px;">
+
+                </form>                        {{ address.get_address_type_display }}
+
+            </div>                    </span>
+
+                    <h4>{{ address.full_name }}</h4>
+
+        {% elif active_tab == 'security' %}                    <p>{{ address.address_line1 }}</p>
+
+            <!-- Security Tab -->                    {% if address.address_line2 %}
+
+            <div class="profile-section">                        <p>{{ address.address_line2 }}</p>
+
+                <h2>Change Email</h2>                    {% endif %}
+
+                <form method="post" action="{% url 'accounts:change_email' %}" class="profile-form">                    <p>{{ address.city }}, {{ address.state }} {{ address.postal_code }}</p>
+
+                    {% csrf_token %}                    <p>{{ address.country }}</p>
+
+                    <div class="form-group">                    <p style="margin-top: 8px;"><strong>Phone:</strong> {{ address.phone }}</p>
+
+                        <label for="new_email">New Email</label>                    
+
+                        <input type="email" id="new_email" name="new_email" required>                    <div class="address-actions">
+
+                    </div>                        <form method="post" action="{% url 'accounts:delete_address' address.id %}" style="display: inline;">
+
+                    <button type="submit" class="btn">Update Email</button>                            {% csrf_token %}
+
+                </form>                            <button type="submit" class="btn-danger" onclick="return confirm('Are you sure you want to delete this address?')">
+
+            </div>                                <i class="fas fa-trash"></i> Delete
+
+                            </button>
+
+            <div class="profile-section">                        </form>
+
+                <h2>Change Password</h2>                    </div>
+
+                <form method="post" action="{% url 'accounts:change_password' %}" class="profile-form">                </div>
+
+                    {% csrf_token %}                {% endfor %}
+
+                    <div class="form-group">            {% else %}
+
+                        <label for="old_password">Current Password</label>                <div class="empty-state">
+
+                        <input type="password" id="old_password" name="old_password" required>                    <i class="fas fa-map-marker-alt"></i>
+
+                    </div>                    <h3>No Addresses Yet</h3>
+
+                    <div class="form-group">                    <p>Add your shipping addresses for faster checkout</p>
+
+                        <label for="new_password1">New Password</label>                    <button onclick="document.getElementById('addAddressModal').style.display='flex'" class="btn-primary">
+
+                        <input type="password" id="new_password1" name="new_password1" required>                        Add Your First Address
+
+                    </div>                    </button>
+
+                    <div class="form-group">                </div>
+
+                        <label for="new_password2">Confirm New Password</label>            {% endif %}
+
+                        <input type="password" id="new_password2" name="new_password2" required>            
+
+                    </div>        {% elif active_tab == 'orders' %}
+
+                    <button type="submit" class="btn">Change Password</button>            <!-- Orders Tab -->
+
+                </form>            <h2 class="section-title">Order History</h2>
+
+            </div>            
+
+            {% if orders %}
+
+        {% elif active_tab == 'addresses' %}                {% for order in orders %}
+
+            <!-- Addresses Tab -->                <div class="order-card">
+
+            <div class="profile-section">                    <div class="order-header">
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">                        <div>
+
+                    <h2 style="margin: 0;">Saved Addresses</h2>                            <div class="order-id">Order #{{ order.id }}</div>
+
+                    <button class="btn" onclick="document.getElementById('addressModal').classList.add('active')">                            <div class="order-date">{{ order.created_at|date:"F d, Y" }}</div>
+
+                        <i class="fas fa-plus"></i> Add Address                        </div>
+
+                    </button>                        <span class="order-status status-pending">Pending</span>
+
+                </div>                    </div>
+
+                    <p style="font-size: 14px; color: #6b7280; margin-bottom: 8px;">
+
+                {% if addresses %}                        <strong style="color: #1a1a1a;">Total:</strong> ₹{{ order.total }}
+
+                    {% for address in addresses %}                    </p>
+
+                        <div class="address-card {% if address.is_default %}default{% endif %}">                    <a href="#" class="btn-secondary" style="display: inline-block; text-decoration: none; margin-top: 8px;">
+
+                            {% if address.is_default %}                        View Details
+
+                                <span class="address-badge">Default</span>                    </a>
+
+                            {% endif %}                </div>
+
+                            <div class="address-type">{{ address.get_address_type_display }}</div>                {% endfor %}
+
+                            <div class="address-name">{{ address.full_name }}</div>            {% else %}
+
+                            <div class="address-details">                <div class="empty-state">
+
+                                {{ address.address_line1 }}<br>                    <i class="fas fa-shopping-bag"></i>
+
+                                {% if address.address_line2 %}{{ address.address_line2 }}<br>{% endif %}                    <h3>No Orders Yet</h3>
+
+                                {{ address.city }}, {{ address.state }} {{ address.postal_code }}<br>                    <p>Start shopping to see your orders here</p>
+
+                                {{ address.country }}<br>                    <a href="{% url 'products:product_list' %}" class="btn-primary" style="text-decoration: none;">
+
+                                Phone: {{ address.phone }}                        Browse Products
+
+                            </div>                    </a>
+
+                            <div class="address-actions">                </div>
+
+                                <form method="post" action="{% url 'accounts:delete_address' address.id %}" style="display: inline;">            {% endif %}
+
+                                    {% csrf_token %}        {% endif %}
+
+                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this address?')">    </div>
+
+                                        <i class="fas fa-trash"></i> Delete</div>
+
+                                    </button>
+
+                                </form><!-- Add Address Modal -->
+
+                            </div><div id="addAddressModal" class="modal">
+
+                        </div>    <div class="modal-content">
+
+                    {% endfor %}        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
+
+                {% else %}            <h2 style="font-size: 20px; font-weight: 700; margin: 0;">Add New Address</h2>
+
+                    <div class="empty-state">            <button onclick="document.getElementById('addAddressModal').style.display='none'" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280;">
+
+                        <i class="fas fa-map-marked-alt"></i>                &times;
+
+                        <h3>No Addresses Saved</h3>            </button>
+
+                        <p>Add your first address to save time during checkout</p>        </div>
+
+                    </div>        
+
+                {% endif %}        <form method="post" action="{% url 'accounts:add_address' %}">
+
+            </div>            {% csrf_token %}
+
+            
+
+        {% elif active_tab == 'orders' %}            <div class="form-group">
+
+            <!-- Orders Tab -->                <label>Address Type</label>
+
+            <div class="profile-section">                <select name="address_type" required>
+
+                <h2>Order History</h2>                    <option value="home">Home</option>
+
+                {% if orders %}                    <option value="work">Work</option>
+
+                    {% for order in orders %}                    <option value="other">Other</option>
+
+                        <div class="order-card">                </select>
+
+                            <div class="order-header">            </div>
+
+                                <div>            
+
+                                    <div class="order-number">Order #{{ order.id }}</div>            <div class="form-row">
+
+                                    <div class="order-date">{{ order.created_at|date:"F d, Y" }}</div>                <div class="form-group">
+
+                                </div>                    <label>Full Name *</label>
+
+                                <span class="order-status {{ order.status }}">{{ order.get_status_display }}</span>                    <input type="text" name="full_name" required>
+
+                            </div>                </div>
+
+                            <div class="order-items">                <div class="form-group">
+
+                                {% for item in order.items.all %}                    <label>Phone *</label>
+
+                                    <div class="order-item">                    <input type="tel" name="phone" required>
+
+                                        {% if item.product.image %}                </div>
+
+                                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="order-item-image">            </div>
+
+                                        {% endif %}            
+
+                                        <div class="order-item-info">            <div class="form-group">
+
+                                            <div class="order-item-name">{{ item.product.name }}</div>                <label>Address Line 1 *</label>
+
+                                            <div class="order-item-quantity">Qty: {{ item.quantity }}</div>                <input type="text" name="address_line1" placeholder="Street address, P.O. box" required>
+
+                                        </div>            </div>
+
+                                    </div>            
+
+                                {% endfor %}            <div class="form-group">
+
+                            </div>                <label>Address Line 2</label>
+
+                            <div class="order-total">Total: ₹{{ order.total_amount }}</div>                <input type="text" name="address_line2" placeholder="Apartment, suite, unit, building, floor, etc.">
+
+                        </div>            </div>
+
+                    {% endfor %}            
+
+                {% else %}            <div class="form-row">
+
+                    <div class="empty-state">                <div class="form-group">
+
+                        <i class="fas fa-shopping-bag"></i>                    <label>City *</label>
+
+                        <h3>No Orders Yet</h3>                    <input type="text" name="city" required>
+
+                        <p>Your order history will appear here once you make a purchase</p>                </div>
+
+                    </div>                <div class="form-group">
+
+                {% endif %}                    <label>State *</label>
+
+            </div>                    <input type="text" name="state" required>
+
+        {% endif %}                </div>
+
+    </div>            </div>
+
+</div>            
+
+            <div class="form-row">
+
+<!-- Add Address Modal -->                <div class="form-group">
+
+<div id="addressModal" class="modal">                    <label>Postal Code *</label>
+
+    <div class="modal-content">                    <input type="text" name="postal_code" required>
+
+        <div class="modal-header">                </div>
+
+            <h2>Add New Address</h2>                <div class="form-group">
+
+            <button type="button" class="modal-close" onclick="document.getElementById('addressModal').classList.remove('active')">&times;</button>                    <label>Country *</label>
+
+        </div>                    <input type="text" name="country" value="India" required>
+
+        <form method="post" action="{% url 'accounts:add_address' %}" class="profile-form">                </div>
+
+            {% csrf_token %}            </div>
+
+            <div class="form-group">            
+
+                <label for="address_type">Address Type</label>            <div class="form-group">
+
+                <select id="address_type" name="address_type" required>                <label style="display: flex; align-items: center; cursor: pointer;">
+
+                    <option value="home">Home</option>                    <input type="checkbox" name="is_default" style="width: auto; margin-right: 8px;">
+
+                    <option value="work">Work</option>                    Set as default address
+
+                    <option value="other">Other</option>                </label>
+
+                </select>            </div>
+
+            </div>            
+
+            <div class="form-group">            <div style="display: flex; gap: 12px; margin-top: 24px;">
+
+                <label for="full_name">Full Name</label>                <button type="submit" class="btn-primary">Save Address</button>
+
+                <input type="text" id="full_name" name="full_name" required>                <button type="button" onclick="document.getElementById('addAddressModal').style.display='none'" class="btn-secondary">
+
+            </div>                    Cancel
+
+            <div class="form-group">                </button>
+
+                <label for="phone">Phone</label>            </div>
+
+                <input type="text" id="phone" name="phone" required>        </form>
+
+            </div>    </div>
+
+            <div class="form-group"></div>
+
+                <label for="address_line1">Address Line 1</label>{% endblock %}
+
+                <input type="text" id="address_line1" name="address_line1" required>
+            </div>
+            <div class="form-group">
+                <label for="address_line2">Address Line 2</label>
+                <input type="text" id="address_line2" name="address_line2">
+            </div>
+            <div class="form-group">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" required>
+            </div>
+            <div class="form-group">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" required>
+            </div>
+            <div class="form-group">
+                <label for="postal_code">Postal Code</label>
+                <input type="text" id="postal_code" name="postal_code" required>
+            </div>
+            <div class="form-group">
+                <label for="country">Country</label>
+                <input type="text" id="country" name="country" value="India" required>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="is_default" value="true">
+                    Set as default address
+                </label>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button type="submit" class="btn">Save Address</button>
+                <button type="button" class="btn btn-secondary" onclick="document.getElementById('addressModal').classList.remove('active')">Cancel</button>
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

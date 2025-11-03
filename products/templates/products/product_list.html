@@ -98,24 +98,23 @@
     /* Products Grid */
     .products-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-        gap: 30px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 24px;
         margin-bottom: 60px;
     }
     
     .product-card {
-        background: rgba(30, 42, 58, 0.6);
-        border: 2px solid rgba(125, 211, 252, 0.3);
-        border-radius: 25px;
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 12px;
         overflow: hidden;
-        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        transition: all 0.2s ease;
         position: relative;
     }
     
     .product-card:hover {
-        transform: translateY(-10px);
-        border-color: rgba(125, 211, 252, 0.8);
-        box-shadow: 0 20px 60px rgba(125, 211, 252, 0.4);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
     }
     
     .product-link {
@@ -128,7 +127,7 @@
         position: relative;
         padding-top: 133.33%; /* 3:4 aspect ratio */
         overflow: hidden;
-        background: rgba(0, 0, 0, 0.3);
+        background: #f9fafb;
     }
     
     .product-image {
@@ -138,32 +137,29 @@
         width: 100%;
         height: 100%;
         object-fit: cover;
-        transition: transform 0.6s ease;
+        transition: transform 0.3s ease;
     }
     
     .product-card:hover .product-image {
-        transform: scale(1.1);
+        transform: scale(1.05);
     }
     
     .product-badge {
         position: absolute;
-        top: 15px;
-        right: 15px;
-        background: linear-gradient(135deg, #ff66b3 0%, #ff9d5c 100%);
+        top: 12px;
+        right: 12px;
+        background: #1a1a1a;
         color: #fff;
-        padding: 8px 16px;
-        border-radius: 50px;
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 16px;
-        font-weight: 700;
-        letter-spacing: 1px;
-        box-shadow: 0 5px 20px rgba(255, 102, 179, 0.5);
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
         z-index: 2;
     }
     
     .product-badge.out-of-stock {
-        background: linear-gradient(135deg, #666 0%, #333 100%);
-        left: 15px;
+        background: #6b7280;
+        left: 12px;
         right: auto;
     }
     
@@ -173,16 +169,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: linear-gradient(to top,
-            rgba(13, 27, 42, 0.95) 0%,
-            rgba(13, 27, 42, 0.7) 40%,
-            transparent 100%);
+        background: rgba(0, 0, 0, 0.4);
         display: flex;
         align-items: flex-end;
         justify-content: center;
-        padding: 30px;
+        padding: 24px;
         opacity: 0;
-        transition: opacity 0.4s ease;
+        transition: opacity 0.2s ease;
     }
     
     .product-card:hover .product-overlay {
@@ -190,18 +183,14 @@
     }
     
     .view-details {
-        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
-        color: #0d1b2a;
-        padding: 14px 35px;
-        border-radius: 50px;
-        font-family: 'Outfit', 'Inter', sans-serif;
-        font-weight: 700;
-        font-size: 14px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        transform: translateY(20px);
-        transition: transform 0.4s ease;
-        box-shadow: 0 10px 30px rgba(125, 211, 252, 0.5);
+        background: #ffffff;
+        color: #1a1a1a;
+        padding: 10px 24px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 13px;
+        transform: translateY(10px);
+        transition: transform 0.2s ease;
     }
     
     .product-card:hover .view-details {
@@ -209,67 +198,58 @@
     }
     
     .product-info {
-        padding: 25px;
+        padding: 20px;
     }
     
     .product-category {
-        font-family: 'Outfit', 'Inter', sans-serif;
-        font-size: 13px;
-        color: rgba(125, 211, 252, 0.9);
+        font-size: 12px;
+        color: #6b7280;
         text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 8px;
+        letter-spacing: 0.5px;
+        margin-bottom: 6px;
         font-weight: 600;
     }
     
     .product-name {
-        font-family: 'Orbitron', 'Syne', sans-serif;
-        font-size: 20px;
-        font-weight: 700;
-        color: #fff;
-        margin-bottom: 15px;
-        line-height: 1.3;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 12px;
+        line-height: 1.4;
     }
     
     .product-pricing {
         display: flex;
         align-items: center;
-        gap: 12px;
-        margin-bottom: 15px;
+        gap: 10px;
+        margin-bottom: 12px;
     }
     
     .product-price {
-        font-family: 'Bebas Neue', sans-serif;
-        font-size: 28px;
+        font-size: 18px;
         font-weight: 700;
     }
     
     .current-price {
-        background: linear-gradient(135deg, #90ee90 0%, #7dd3fc 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #1a1a1a;
     }
     
     .original-price {
-        color: rgba(255, 255, 255, 0.4);
+        color: #9ca3af;
         text-decoration: line-through;
-        font-size: 20px;
+        font-size: 14px;
     }
     
     .product-meta {
         display: flex;
-        gap: 15px;
-        font-family: 'Inter', sans-serif;
-        font-size: 13px;
-        color: rgba(255, 255, 255, 0.7);
+        gap: 12px;
+        font-size: 12px;
+        color: #6b7280;
     }
     
     .product-meta i {
-        color: rgba(144, 238, 144, 0.8);
-        margin-right: 5px;
+        color: #1a1a1a;
+        margin-right: 4px;
     }
     
     /* Pagination */
@@ -282,38 +262,35 @@
     .pagination {
         display: flex;
         align-items: center;
-        gap: 20px;
-        background: rgba(30, 42, 58, 0.6);
-        padding: 20px 40px;
-        border-radius: 50px;
-        border: 2px solid rgba(125, 211, 252, 0.3);
+        gap: 16px;
+        background: #ffffff;
+        padding: 16px 32px;
+        border-radius: 8px;
+        border: 1px solid #e5e7eb;
     }
     
     .page-link {
-        padding: 12px 24px;
-        background: linear-gradient(135deg, rgba(125, 211, 252, 0.2) 0%, rgba(144, 238, 144, 0.2) 100%);
-        border: 2px solid rgba(125, 211, 252, 0.4);
-        border-radius: 50px;
-        color: #7dd3fc;
+        padding: 10px 20px;
+        background: #f9fafb;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        color: #1a1a1a;
         text-decoration: none;
-        font-family: 'Outfit', 'Inter', sans-serif;
         font-weight: 600;
         font-size: 14px;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
     }
     
     .page-link:hover {
-        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
-        color: #0d1b2a;
-        transform: scale(1.05);
-        box-shadow: 0 10px 30px rgba(125, 211, 252, 0.5);
+        background: #1a1a1a;
+        color: #ffffff;
     }
     
     .page-info {
-        font-family: 'Outfit', 'Inter', sans-serif;
-        color: rgba(255, 255, 255, 0.8);
+        color: #6b7280;
         font-weight: 500;
-        padding: 0 15px;
+        padding: 0 12px;
+        font-size: 14px;
     }
     
     /* No Products */
@@ -324,25 +301,21 @@
     
     .no-products i {
         font-size: 80px;
-        background: linear-gradient(135deg, #7dd3fc 0%, #90ee90 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
+        color: #d1d5db;
         margin-bottom: 30px;
     }
     
     .no-products h3 {
-        font-family: 'Orbitron', 'Syne', sans-serif;
-        font-size: 36px;
-        color: #fff;
-        margin-bottom: 15px;
+        font-size: 28px;
+        color: #1a1a1a;
+        margin-bottom: 12px;
+        font-weight: 700;
     }
     
     .no-products p {
-        font-family: 'Inter', sans-serif;
-        font-size: 18px;
-        color: rgba(255, 255, 255, 0.7);
-        margin-bottom: 40px;
+        font-size: 16px;
+        color: #6b7280;
+        margin-bottom: 32px;
     }
     
     @media (max-width: 768px) {

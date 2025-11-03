@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import Profile
+from .models import Profile, Address
 
 
 class ProfileInline(admin.StackedInline):
@@ -34,6 +34,23 @@ class ProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         ('User', {'fields': ('user',)}),
         ('Personal Info', {'fields': ('bio', 'gender', 'profile_picture')}),
+        ('Address', {'fields': ('address_line1', 'address_line2', 'city', 'state', 'postal_code', 'country')}),
+        ('Timestamps', {'fields': ('created_at', 'updated_at')}),
+    )
+
+
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    """Admin for Address model"""
+    list_display = ['user', 'full_name', 'address_type', 'city', 'state', 'is_default', 'created_at']
+    list_filter = ['address_type', 'is_default', 'country', 'created_at']
+    search_fields = ['user__username', 'full_name', 'phone', 'city', 'state', 'postal_code']
+    ordering = ['-is_default', '-created_at']
+    readonly_fields = ['created_at', 'updated_at']
+    
+    fieldsets = (
+        ('User', {'fields': ('user', 'address_type', 'is_default')}),
+        ('Contact', {'fields': ('full_name', 'phone')}),
         ('Address', {'fields': ('address_line1', 'address_line2', 'city', 'state', 'postal_code', 'country')}),
         ('Timestamps', {'fields': ('created_at', 'updated_at')}),
     )
