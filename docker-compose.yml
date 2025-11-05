@@ -16,7 +16,8 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-
+  networks:
+      - abhirang-network
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
@@ -41,8 +42,17 @@ services:
         condition: service_healthy
     stdin_open: true
     tty: true
+    networks:
+      - abhirang-network
+      - proxy
 
 volumes:
   postgres_data:
   static_volume:
   media_volume:
+
+networks:
+  abhirang-network:
+    driver: bridge
+  proxy:
+    external: true
