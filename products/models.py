@@ -125,7 +125,3 @@ class ProductImage(models.Model):
         if not self.alt_text:
             self.alt_text = self.product.name
         super().save(*args, **kwargs)
-
-
-Product.object.first()
-Product.objects.last()
