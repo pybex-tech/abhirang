@@ -16,7 +16,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  networks:
+    networks:
       - abhirang-network
   web:
     build: .
@@ -26,7 +26,7 @@ services:
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     ports:
-      - "8000:8000"
+      - "3636:8000"
     environment:
       - DEBUG=${DEBUG:-True}
       - SECRET_KEY=${SECRET_KEY:-django-insecure-change-this-in-production}
