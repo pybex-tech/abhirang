@@ -14,8 +14,9 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  networks:
+    networks:
       - abhirang-network
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
