@@ -17,6 +17,6 @@ jobs:
         key: ${{ secrets.PYBEX_SAAS_DEV_MUM_SSH }}
         script: |
           cd ~/projects/pybex/abhirang
-          docker compose down
+          docker compose -f docker-compose.uat.yml down
           git pull
-          docker compose up --build -d
+          docker compose -f docker-compose.uat.yml up --build -d
