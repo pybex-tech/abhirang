@@ -31,10 +31,10 @@ COPY . /app/
 RUN mkdir -p /app/staticfiles /app/media
 
 # Expose port
-EXPOSE 8000
+EXPOSE 3636
 
 # Set entrypoint
 ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Run the application
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+CMD ["python", "manage.py", "runserver", "0.0.0.0:3636"]

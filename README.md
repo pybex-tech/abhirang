@@ -68,8 +68,8 @@ make up
 ```
 
 The application will be available at:
-- Website: http://localhost:8000
-- Admin: http://localhost:8000/admin
+- Website: http://localhost:3636
+- Admin: http://localhost:3636/admin
 
 ## Docker Commands
 
@@ -227,8 +227,8 @@ docker-compose exec web python manage.py test
 
 **Port already in use:**
 ```bash
-# Find and kill process using port 8000
-lsof -ti:8000 | xargs kill -9
+# Find and kill process using port 3636
+lsof -ti:3636 | xargs kill -9
 ```
 
 **Database connection errors:**
