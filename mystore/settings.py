@@ -27,7 +27,15 @@ SECRET_KEY = config('SECRET_KEY', default='django-insecure-_syj1$srlgs^ko-pz8txu
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=Csv())
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1,abhirang.uat.pybex.io,abhirang.store', cast=Csv())
+
+# CSRF settings
+CSRF_TRUSTED_ORIGINS = [
+    'https://abhirang.uat.pybex.io',
+    'https://abhirang.store',
+    'http://localhost:3636',
+    'http://127.0.0.1:3636',
+]
 
 
 # Application definition
