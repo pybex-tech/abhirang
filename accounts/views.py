@@ -94,10 +94,10 @@ def profile_view(request):
     from .models import Address
     addresses = Address.objects.filter(user=request.user)
     
-    # Get user's orders (if order model exists)
+    # Get user's orders
     orders = []
     try:
-        from cart.models import Order
+        from orders.models import Order
         orders = Order.objects.filter(user=request.user).order_by('-created_at')[:10]
     except:
         pass

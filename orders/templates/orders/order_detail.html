@@ -1,0 +1,468 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .order-detail-container {
+        min-height: calc(100vh - 80px);
+        background: #ffffff;
+        padding: 60px 20px;
+    }
+    
+    .order-detail-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    /* Success Message */
+    .success-message {
+        background: #f0fdf4;
+        border: 1px solid #86efac;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    
+    .success-icon {
+        font-size: 48px;
+        color: #16a34a;
+        margin-bottom: 16px;
+    }
+    
+    .success-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #166534;
+        margin-bottom: 8px;
+    }
+    
+    .success-text {
+        font-size: 14px;
+        color: #166534;
+    }
+    
+    /* Order Header */
+    .order-header {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 30px;
+        margin-bottom: 24px;
+    }
+    
+    .order-number {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 16px;
+    }
+    
+    .order-meta {
+        display: flex;
+        gap: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 14px;
+        color: #6b7280;
+    }
+    
+    .meta-icon {
+        color: #1a1a1a;
+    }
+    
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+    
+    .status-pending {
+        background: #fef3c7;
+        color: #92400e;
+    }
+    
+    .status-confirmed {
+        background: #dbeafe;
+        color: #1e40af;
+    }
+    
+    .status-processing {
+        background: #e0e7ff;
+        color: #4338ca;
+    }
+    
+    .status-shipped {
+        background: #ddd6fe;
+        color: #6d28d9;
+    }
+    
+    .status-delivered {
+        background: #d1fae5;
+        color: #065f46;
+    }
+    
+    .status-cancelled {
+        background: #fee2e2;
+        color: #991b1b;
+    }
+    
+    /* Order Sections */
+    .section {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 30px;
+        margin-bottom: 24px;
+    }
+    
+    .section-title {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .section-icon {
+        font-size: 20px;
+        color: #1a1a1a;
+    }
+    
+    /* Order Items */
+    .order-items {
+        display: grid;
+        gap: 16px;
+    }
+    
+    .order-item {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 16px;
+        padding: 16px;
+        background: #f9fafb;
+        border-radius: 8px;
+    }
+    
+    .item-image {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 6px;
+        background: #ffffff;
+    }
+    
+    .item-details {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    
+    .item-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+    }
+    
+    .item-meta {
+        font-size: 14px;
+        color: #6b7280;
+    }
+    
+    .item-price-section {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        justify-content: center;
+    }
+    
+    .item-price {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    .item-unit-price {
+        font-size: 13px;
+        color: #6b7280;
+    }
+    
+    /* Shipping Address */
+    .address-content {
+        font-size: 14px;
+        color: #1a1a1a;
+        line-height: 1.8;
+    }
+    
+    .address-name {
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+    
+    /* Order Summary */
+    .summary-rows {
+        display: grid;
+        gap: 12px;
+    }
+    
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+    }
+    
+    .summary-label {
+        color: #6b7280;
+    }
+    
+    .summary-value {
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    .discount-value {
+        color: #16a34a;
+    }
+    
+    .coupon-info {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 10px;
+        background: #f0fdf4;
+        border-radius: 4px;
+        font-size: 12px;
+        color: #166534;
+        font-weight: 600;
+    }
+    
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 16px;
+        border-top: 2px solid #e5e7eb;
+        margin-top: 16px;
+    }
+    
+    .total-label {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    .total-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a1a;
+    }
+    
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 30px;
+    }
+    
+    .btn {
+        flex: 1;
+        padding: 14px 24px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.2s ease;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .btn-primary {
+        background: #1a1a1a;
+        color: #ffffff;
+    }
+    
+    .btn-primary:hover {
+        background: #000000;
+    }
+    
+    .btn-secondary {
+        background: #ffffff;
+        color: #1a1a1a;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .btn-secondary:hover {
+        background: #f9fafb;
+    }
+    
+    @media (max-width: 768px) {
+        .order-item {
+            grid-template-columns: 1fr;
+            text-align: center;
+        }
+        
+        .item-image {
+            margin: 0 auto;
+        }
+        
+        .item-price-section {
+            align-items: center;
+        }
+        
+        .action-buttons {
+            flex-direction: column;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="order-detail-container">
+    <div class="order-detail-wrapper">
+        <!-- Success Message -->
+        <div class="success-message">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h1 class="success-title">Order Placed Successfully!</h1>
+            <p class="success-text">Thank you for your order. We'll send you a confirmation email shortly.</p>
+        </div>
+        
+        <!-- Order Header -->
+        <div class="order-header">
+            <h2 class="order-number">Order #{{ order.order_number }}</h2>
+            <div class="order-meta">
+                <div class="meta-item">
+                    <i class="fas fa-calendar meta-icon"></i>
+                    <span>{{ order.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="meta-item">
+                    <i class="fas fa-clock meta-icon"></i>
+                    <span>{{ order.created_at|time:"h:i A" }}</span>
+                </div>
+                <div class="meta-item">
+                    <span class="status-badge status-{{ order.status }}">
+                        {{ order.get_status_display }}
+                    </span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Items -->
+        <div class="section">
+            <h3 class="section-title">
+                <i class="fas fa-box section-icon"></i>
+                Order Items
+            </h3>
+            <div class="order-items">
+                {% for item in order.items.all %}
+                <div class="order-item">
+                    {% if item.product.image %}
+                    <img src="{{ item.product.image.url }}" alt="{{ item.product_name }}" class="item-image">
+                    {% else %}
+                    <div class="item-image" style="display: flex; align-items: center; justify-content: center; background: #f3f4f6;">
+                        <i class="fas fa-image" style="color: #9ca3af; font-size: 24px;"></i>
+                    </div>
+                    {% endif %}
+                    <div class="item-details">
+                        <div class="item-name">{{ item.product_name }}</div>
+                        <div class="item-meta">Quantity: {{ item.quantity }}</div>
+                    </div>
+                    <div class="item-price-section">
+                        <div class="item-price">₹{{ item.total|floatformat:2 }}</div>
+                        <div class="item-unit-price">₹{{ item.price|floatformat:2 }} each</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Shipping Address -->
+        <div class="section">
+            <h3 class="section-title">
+                <i class="fas fa-shipping-fast section-icon"></i>
+                Shipping Address
+            </h3>
+            <div class="address-content">
+                <div class="address-name">{{ order.shipping_full_name }}</div>
+                <div>{{ order.shipping_address_line1 }}</div>
+                {% if order.shipping_address_line2 %}
+                <div>{{ order.shipping_address_line2 }}</div>
+                {% endif %}
+                <div>{{ order.shipping_city }}, {{ order.shipping_state }} {{ order.shipping_postal_code }}</div>
+                <div>{{ order.shipping_country }}</div>
+                <div style="margin-top: 8px;">
+                    <i class="fas fa-phone"></i> {{ order.shipping_phone }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Order Summary -->
+        <div class="section">
+            <h3 class="section-title">
+                <i class="fas fa-receipt section-icon"></i>
+                Order Summary
+            </h3>
+            <div class="summary-rows">
+                <div class="summary-row">
+                    <span class="summary-label">Subtotal</span>
+                    <span class="summary-value">₹{{ order.subtotal|floatformat:2 }}</span>
+                </div>
+                
+                {% if order.discount_amount > 0 %}
+                <div class="summary-row">
+                    <span class="summary-label">
+                        Discount
+                        {% if order.coupon_code %}
+                        <span class="coupon-info">
+                            <i class="fas fa-tag"></i>
+                            {{ order.coupon_code }}
+                        </span>
+                        {% endif %}
+                    </span>
+                    <span class="summary-value discount-value">-₹{{ order.discount_amount|floatformat:2 }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="summary-row">
+                    <span class="summary-label">Shipping</span>
+                    <span class="summary-value">₹{{ order.shipping_cost|floatformat:2 }}</span>
+                </div>
+                
+                {% if order.tax_amount > 0 %}
+                <div class="summary-row">
+                    <span class="summary-label">Tax</span>
+                    <span class="summary-value">₹{{ order.tax_amount|floatformat:2 }}</span>
+                </div>
+                {% endif %}
+                
+                <div class="total-row">
+                    <span class="total-label">Total</span>
+                    <span class="total-value">₹{{ order.total_amount|floatformat:2 }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="action-buttons">
+            <a href="{% url 'orders:order_list' %}" class="btn btn-secondary">
+                <i class="fas fa-list"></i> View All Orders
+            </a>
+            <a href="{% url 'core:index' %}" class="btn btn-primary">
+                <i class="fas fa-shopping-bag"></i> Continue Shopping
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,639 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .checkout-container {
+        min-height: calc(100vh - 80px);
+        background: #ffffff;
+        padding: 60px 20px;
+    }
+    
+    .checkout-wrapper {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    
+    .checkout-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .checkout-title {
+        font-size: 42px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 10px;
+    }
+    
+    .checkout-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 30px;
+        align-items: start;
+    }
+    
+    /* Main Content */
+    .checkout-main {
+        background: #ffffff;
+    }
+    
+    .section {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 30px;
+        margin-bottom: 24px;
+    }
+    
+    .section-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .section-icon {
+        font-size: 22px;
+        color: #1a1a1a;
+    }
+    
+    /* Address Selection */
+    .address-list {
+        display: grid;
+        gap: 16px;
+    }
+    
+    .address-card {
+        position: relative;
+        padding: 20px;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .address-card:hover {
+        border-color: #1a1a1a;
+    }
+    
+    .address-card.selected {
+        border-color: #1a1a1a;
+        background: #f9fafb;
+    }
+    
+    .address-radio {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+    
+    .address-content {
+        padding-right: 40px;
+    }
+    
+    .address-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 8px;
+    }
+    
+    .address-details {
+        font-size: 14px;
+        color: #6b7280;
+        line-height: 1.6;
+    }
+    
+    .address-phone {
+        font-size: 14px;
+        color: #6b7280;
+        margin-top: 8px;
+    }
+    
+    .default-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        background: #1a1a1a;
+        color: #ffffff;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        border-radius: 4px;
+        margin-left: 8px;
+    }
+    
+    .no-address {
+        text-align: center;
+        padding: 40px;
+        color: #6b7280;
+    }
+    
+    .add-address-btn {
+        display: inline-block;
+        margin-top: 16px;
+        padding: 10px 20px;
+        background: #1a1a1a;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+    
+    .add-address-btn:hover {
+        background: #000000;
+    }
+    
+    /* Coupon Section */
+    .coupon-form {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+    
+    .coupon-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 14px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+    
+    .coupon-input:focus {
+        outline: none;
+        border-color: #1a1a1a;
+    }
+    
+    .apply-coupon-btn {
+        padding: 12px 24px;
+        background: #1a1a1a;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .apply-coupon-btn:hover {
+        background: #000000;
+    }
+    
+    .applied-coupon {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 16px;
+        background: #f0fdf4;
+        border: 1px solid #86efac;
+        border-radius: 6px;
+    }
+    
+    .applied-coupon-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .applied-coupon-icon {
+        color: #16a34a;
+        font-size: 18px;
+    }
+    
+    .applied-coupon-text {
+        font-size: 14px;
+        color: #166534;
+        font-weight: 600;
+    }
+    
+    .remove-coupon-btn {
+        padding: 6px 12px;
+        background: transparent;
+        color: #dc2626;
+        border: 1px solid #dc2626;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .remove-coupon-btn:hover {
+        background: #dc2626;
+        color: #ffffff;
+    }
+    
+    .coupon-message {
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        margin-top: 12px;
+    }
+    
+    .coupon-message.success {
+        background: #f0fdf4;
+        border: 1px solid #86efac;
+        color: #166534;
+    }
+    
+    .coupon-message.error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+    }
+    
+    /* Order Notes */
+    .notes-textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid #e5e7eb;
+        border-radius: 6px;
+        font-size: 14px;
+        font-family: inherit;
+        resize: vertical;
+        min-height: 100px;
+    }
+    
+    .notes-textarea:focus {
+        outline: none;
+        border-color: #1a1a1a;
+    }
+    
+    /* Order Summary Sidebar */
+    .order-summary {
+        position: sticky;
+        top: 100px;
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 30px;
+    }
+    
+    .summary-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 24px;
+    }
+    
+    .summary-items {
+        margin-bottom: 24px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+    
+    .item-info {
+        flex: 1;
+    }
+    
+    .item-name {
+        font-size: 14px;
+        color: #1a1a1a;
+        font-weight: 500;
+        margin-bottom: 4px;
+    }
+    
+    .item-quantity {
+        font-size: 13px;
+        color: #6b7280;
+    }
+    
+    .item-price {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    .summary-totals {
+        border-top: 2px solid #e5e7eb;
+        padding-top: 20px;
+        margin-top: 20px;
+    }
+    
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        font-size: 14px;
+    }
+    
+    .total-label {
+        color: #6b7280;
+    }
+    
+    .total-value {
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    .discount-value {
+        color: #16a34a;
+    }
+    
+    .final-total {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 16px;
+        border-top: 2px solid #e5e7eb;
+        margin-top: 16px;
+    }
+    
+    .final-total-label {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    .final-total-value {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1a1a1a;
+    }
+    
+    .place-order-btn {
+        width: 100%;
+        padding: 16px;
+        background: #1a1a1a;
+        color: #ffffff;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        margin-top: 24px;
+    }
+    
+    .place-order-btn:hover {
+        background: #000000;
+    }
+    
+    .place-order-btn:disabled {
+        background: #9ca3af;
+        cursor: not-allowed;
+    }
+    
+    @media (max-width: 992px) {
+        .checkout-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .order-summary {
+            position: static;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="checkout-container">
+    <div class="checkout-wrapper">
+        <div class="checkout-header">
+            <h1 class="checkout-title">Checkout</h1>
+        </div>
+        
+        <form method="post" action="{% url 'orders:place_order' %}" id="checkout-form">
+            {% csrf_token %}
+            
+            <div class="checkout-grid">
+                <div class="checkout-main">
+                    <!-- Delivery Address Section -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <i class="fas fa-map-marker-alt section-icon"></i>
+                            Delivery Address
+                        </h2>
+                        
+                        {% if addresses %}
+                            <div class="address-list">
+                                {% for address in addresses %}
+                                <div class="address-card {% if address == default_address %}selected{% endif %}" 
+                                     onclick="selectAddress(this, {{ address.id }})">
+                                    <input type="radio" 
+                                           name="address_id" 
+                                           value="{{ address.id }}" 
+                                           class="address-radio"
+                                           {% if address == default_address %}checked{% endif %}>
+                                    <div class="address-content">
+                                        <div class="address-name">
+                                            {{ address.full_name }}
+                                            {% if address.is_default %}
+                                            <span class="default-badge">Default</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="address-details">
+                                            {{ address.address_line1 }}
+                                            {% if address.address_line2 %}
+                                            <br>{{ address.address_line2 }}
+                                            {% endif %}
+                                            <br>{{ address.city }}, {{ address.state }} {{ address.postal_code }}
+                                            <br>{{ address.country }}
+                                        </div>
+                                        <div class="address-phone">
+                                            <i class="fas fa-phone"></i> {{ address.phone }}
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        {% else %}
+                            <div class="no-address">
+                                <p>You don't have any saved addresses.</p>
+                                <a href="{% url 'accounts:profile' %}?tab=addresses" class="add-address-btn">
+                                    <i class="fas fa-plus"></i> Add New Address
+                                </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Coupon Section -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <i class="fas fa-tag section-icon"></i>
+                            Apply Coupon
+                        </h2>
+                        
+                        {% if applied_coupon %}
+                            <div class="applied-coupon">
+                                <div class="applied-coupon-info">
+                                    <i class="fas fa-check-circle applied-coupon-icon"></i>
+                                    <span class="applied-coupon-text">
+                                        Coupon "{{ applied_coupon.code }}" applied
+                                    </span>
+                                </div>
+                                <button type="button" class="remove-coupon-btn" onclick="removeCoupon()">
+                                    Remove
+                                </button>
+                            </div>
+                        {% else %}
+                            <div class="coupon-form">
+                                <input type="text" 
+                                       id="coupon-code" 
+                                       class="coupon-input" 
+                                       placeholder="Enter coupon code"
+                                       maxlength="50">
+                                <button type="button" class="apply-coupon-btn" onclick="applyCoupon()">
+                                    Apply
+                                </button>
+                            </div>
+                            <div id="coupon-message"></div>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Order Notes Section -->
+                    <div class="section">
+                        <h2 class="section-title">
+                            <i class="fas fa-comment section-icon"></i>
+                            Order Notes (Optional)
+                        </h2>
+                        <textarea name="notes" 
+                                  class="notes-textarea" 
+                                  placeholder="Any special instructions for delivery..."></textarea>
+                    </div>
+                </div>
+                
+                <!-- Order Summary Sidebar -->
+                <div class="order-summary">
+                    <h2 class="summary-title">Order Summary</h2>
+                    
+                    <div class="summary-items">
+                        {% for item in cart_items %}
+                        <div class="summary-item">
+                            <div class="item-info">
+                                <div class="item-name">{{ item.product.name }}</div>
+                                <div class="item-quantity">Qty: {{ item.quantity }}</div>
+                            </div>
+                            <div class="item-price">₹{{ item.product.price|floatformat:2 }}</div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <div class="summary-totals">
+                        <div class="total-row">
+                            <span class="total-label">Subtotal</span>
+                            <span class="total-value">₹<span id="subtotal">{{ subtotal|floatformat:2 }}</span></span>
+                        </div>
+                        
+                        {% if discount_amount > 0 %}
+                        <div class="total-row">
+                            <span class="total-label">Discount</span>
+                            <span class="total-value discount-value">-₹<span id="discount">{{ discount_amount|floatformat:2 }}</span></span>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="total-row">
+                            <span class="total-label">Shipping</span>
+                            <span class="total-value">₹<span id="shipping">{{ shipping_cost|floatformat:2 }}</span></span>
+                        </div>
+                        
+                        <div class="final-total">
+                            <span class="final-total-label">Total</span>
+                            <span class="final-total-value">₹<span id="total">{{ total|floatformat:2 }}</span></span>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="place-order-btn" {% if not addresses %}disabled{% endif %}>
+                        <i class="fas fa-lock"></i> Place Order
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function selectAddress(card, addressId) {
+    // Remove selected class from all cards
+    document.querySelectorAll('.address-card').forEach(c => {
+        c.classList.remove('selected');
+    });
+    
+    // Add selected class to clicked card
+    card.classList.add('selected');
+    
+    // Check the radio button
+    card.querySelector('input[type="radio"]').checked = true;
+}
+
+function applyCoupon() {
+    const couponCode = document.getElementById('coupon-code').value.trim().toUpperCase();
+    const messageDiv = document.getElementById('coupon-message');
+    
+    if (!couponCode) {
+        showMessage('Please enter a coupon code', 'error');
+        return;
+    }
+    
+    fetch("{% url 'orders:apply_coupon' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        },
+        body: JSON.stringify({
+            coupon_code: couponCode
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showMessage(data.message, 'success');
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+        } else {
+            showMessage(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        showMessage('Error applying coupon', 'error');
+    });
+}
+
+function removeCoupon() {
+    fetch("{% url 'orders:remove_coupon' %}", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    });
+}
+
+function showMessage(message, type) {
+    const messageDiv = document.getElementById('coupon-message');
+    messageDiv.innerHTML = message;
+    messageDiv.className = 'coupon-message ' + type;
+    
+    setTimeout(() => {
+        messageDiv.innerHTML = '';
+        messageDiv.className = '';
+    }, 5000);
+}
+</script>
+{% endblock %}
