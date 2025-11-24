@@ -4,11 +4,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=${DB_NAME:-abhirang_db}
-      - POSTGRES_USER=${DB_USER:-postgres}
-      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres}
-    ports:
-      - "5432:5432"
+      - POSTGRES_DB=${DB_NAME:-abhirang_uat_db}
+      - POSTGRES_USER=${DB_USER:-postgres_uat}
+      - POSTGRES_PASSWORD=${DB_PASSWORD:-postgres_uat}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s

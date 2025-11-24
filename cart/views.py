@@ -13,7 +13,8 @@ class CartView(View):
     """Display user's shopping cart"""
     
     def get(self, request, *args, **kwargs):
-        cart, created = Cart.objects.get_or_create(user=request.user)
+        user = request.user
+        cart, created = Cart.objects.get_or_create(user=user)
         cart_items = cart.items.select_related('product').prefetch_related('product__images')
         
         context = {

@@ -106,3 +106,17 @@ class CartItem(models.Model):
             self.save()
         else:
             self.delete()
+
+    def add_product_to_cart(user, product, quantity=1, size=None):
+        """Utility method to add a product to user's cart"""
+        cart, created = Cart.objects.get_or_create(user=user)
+        cart_item, item_created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product,
+            size=size,
+            defaults={'quantity': quantity}
+        )
+        if not item_created:
+            cart_item.increase_quantity(quantity)
+        return cart_item
+

@@ -4,6 +4,10 @@ from django.utils.text import slugify
 
 
 class Category(models.Model):
+    """
+    cat = Category.objects.get(id=1)
+    products = cat.products.all()
+    """
     name = models.CharField(max_length=200, unique=True)
     slug = models.SlugField(max_length=200, unique=True, blank=True)
     description = models.TextField(blank=True)
@@ -29,6 +33,10 @@ class Category(models.Model):
 
 
 class Product(models.Model):
+    """
+    product = Product.objects.get(id=1)
+    cat = product.category
+    """
     SIZE_CHOICES = [
         ('XS', 'Extra Small'),
         ('S', 'Small'),
