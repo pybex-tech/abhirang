@@ -148,7 +148,7 @@ def apply_coupon(request):
                 'message': f'Coupon applied successfully! You saved ₹{discount_amount:.2f}',
                 'discount_amount': discount_amount,
                 'coupon_code': coupon_code,
-                'discount_display': coupon.get_discount_display()
+                'discount_display': discount_amount
             })
             
         except json.JSONDecodeError:
@@ -191,6 +191,12 @@ def place_order(request):
     """
     if request.method == 'POST':
         try:
+            # Debug logging
+            print("=" * 50)
+            print("PLACE ORDER CALLED")
+            print(f"POST data: {request.POST}")
+            print("=" * 50)
+            
             # Get cart
             cart = Cart.objects.get(user=request.user)
             cart_items = cart.items.all()
@@ -201,6 +207,8 @@ def place_order(request):
             
             # Get selected address
             address_id = request.POST.get('address_id')
+            print(f"Address ID from form: {address_id}")
+            
             if not address_id:
                 messages.error(request, "Please select a delivery address")
                 return redirect('orders:checkout')
@@ -241,7 +249,7 @@ def place_order(request):
                 shipping_address_line2=address.address_line2,
                 shipping_city=address.city,
                 shipping_state=address.state,
-                shipping_postal_code=address.postal_code,
+                shipping_pincode=address.postal_code,
                 shipping_country=address.country,
                 subtotal=subtotal,
                 discount_amount=discount_amount,
@@ -261,7 +269,6 @@ def place_order(request):
                     order=order,
                     product=cart_item.product,
                     product_name=cart_item.product.name,
-                    product_price=cart_item.product.price,
                     quantity=cart_item.quantity,
                     price=cart_item.product.price
                 )
@@ -285,12 +292,18 @@ def place_order(request):
             cart_items.delete()
             
             messages.success(request, f'Order placed successfully! Order number: {order.order_number}')
-            return redirect('orders:order_detail', order_number=order.order_number)
+            return redirect('payments:initiate_payment', order_number=order.order_number)
             
         except Cart.DoesNotExist:
             messages.error(request, "Your cart is empty!")
             return redirect('cart:cart_detail')
         except Exception as e:
+            print("=" * 50)
+            print(f"ERROR in place_order: {str(e)}")
+            print(f"Error type: {type(e).__name__}")
+            import traceback
+            traceback.print_exc()
+            print("=" * 50)
             messages.error(request, f"Error placing order: {str(e)}")
             return redirect('orders:checkout')
     

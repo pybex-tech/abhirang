@@ -1,0 +1,198 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .failed-container {
+        min-height: calc(100vh - 80px);
+        background: #ffffff;
+        padding: 60px 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .failed-card {
+        max-width: 700px;
+        width: 100%;
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 48px;
+        text-align: center;
+    }
+    
+    .failed-icon {
+        width: 80px;
+        height: 80px;
+        background: #fef2f2;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 24px;
+    }
+    
+    .failed-icon i {
+        font-size: 40px;
+        color: #dc2626;
+    }
+    
+    .failed-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 12px;
+    }
+    
+    .failed-subtitle {
+        font-size: 16px;
+        color: #6b7280;
+        margin-bottom: 32px;
+    }
+    
+    .payment-info {
+        background: #f9fafb;
+        border-radius: 8px;
+        padding: 24px;
+        margin-bottom: 32px;
+        text-align: left;
+    }
+    
+    .info-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .info-row:last-child {
+        border-bottom: none;
+    }
+    
+    .info-label {
+        font-size: 14px;
+        color: #6b7280;
+    }
+    
+    .info-value {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+    
+    .failed-badge {
+        display: inline-block;
+        padding: 8px 16px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        font-size: 14px;
+        color: #991b1b;
+        font-weight: 600;
+    }
+    
+    .error-message {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 6px;
+        padding: 16px;
+        margin-bottom: 24px;
+        text-align: left;
+        font-size: 14px;
+        color: #991b1b;
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+        margin-top: 32px;
+    }
+    
+    .btn {
+        flex: 1;
+        padding: 14px 24px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.2s ease;
+    }
+    
+    .btn-primary {
+        background: #1a1a1a;
+        color: #ffffff;
+    }
+    
+    .btn-primary:hover {
+        background: #000000;
+    }
+    
+    .btn-secondary {
+        background: #ffffff;
+        color: #1a1a1a;
+        border: 1px solid #e5e7eb;
+    }
+    
+    .btn-secondary:hover {
+        background: #f9fafb;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="failed-container">
+    <div class="failed-card">
+        <div class="failed-icon">
+            <i class="fas fa-times-circle"></i>
+        </div>
+        
+        <h1 class="failed-title">Payment Failed</h1>
+        <p class="failed-subtitle">We couldn't process your payment</p>
+        
+        {% if payment.failure_reason %}
+        <div class="error-message">
+            <strong><i class="fas fa-exclamation-triangle"></i> Error Details:</strong><br>
+            {{ payment.failure_reason }}
+        </div>
+        {% endif %}
+        
+        <div class="payment-info">
+            <div class="info-row">
+                <span class="info-label">Order Number</span>
+                <span class="info-value">{{ order.order_number }}</span>
+            </div>
+            {% if payment.razorpay_order_id %}
+            <div class="info-row">
+                <span class="info-label">Razorpay Order ID</span>
+                <span class="info-value">{{ payment.razorpay_order_id }}</span>
+            </div>
+            {% endif %}
+            <div class="info-row">
+                <span class="info-label">Order Amount</span>
+                <span class="info-value">₹{{ order.total_amount|floatformat:2 }}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Payment Status</span>
+                <span class="info-value">
+                    <span class="failed-badge">{{ payment.get_status_display }}</span>
+                </span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Attempted On</span>
+                <span class="info-value">{{ payment.updated_at|date:"F d, Y h:i A" }}</span>
+            </div>
+        </div>
+        
+        <div class="action-buttons">
+            <a href="{% url 'payments:initiate_payment' order.order_number %}" class="btn btn-primary">
+                <i class="fas fa-redo"></i> Retry Payment
+            </a>
+            <a href="{% url 'core:index' %}" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Go Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

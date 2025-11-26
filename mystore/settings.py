@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'products',
     'cart',
     'orders',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -164,3 +165,8 @@ LOGOUT_REDIRECT_URL = 'accounts:login'
 # Media Files (for profile pictures)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+# Razorpay Settings
+RAZORPAY_KEY_ID = config('RAZORPAY_KEY_ID', default='rzp_test_RkNsi5IUCApipw')
+RAZORPAY_KEY_SECRET = config('RAZORPAY_KEY_SECRET', default='G5QDylTGpiBJXDEsygfcicQW')
+RAZORPAY_WEBHOOK_SECRET = config('RAZORPAY_WEBHOOK_SECRET', default='')

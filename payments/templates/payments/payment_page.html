@@ -1,0 +1,273 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    .payment-container {
+        min-height: calc(100vh - 80px);
+        background: #f9fafb;
+        padding: 40px 20px;
+    }
+    
+    .payment-wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 24px;
+    }
+    
+    .order-summary-card {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 32px;
+        height: fit-content;
+    }
+    
+    .payment-card {
+        background: #ffffff;
+        border-radius: 12px;
+        border: 1px solid #e5e7eb;
+        padding: 32px;
+        height: fit-content;
+        position: sticky;
+        top: 20px;
+    }
+    
+    .card-title {
+        font-size: 24px;
+        font-weight: 700;
+        color: #1a1a1a;
+        margin-bottom: 24px;
+    }
+    
+    .order-item {
+        display: flex;
+        gap: 16px;
+        padding: 16px 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .order-item:last-child {
+        border-bottom: none;
+    }
+    
+    .item-details {
+        flex: 1;
+    }
+    
+    .item-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 4px;
+    }
+    
+    .item-variant {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 8px;
+    }
+    
+    .item-price {
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+        text-align: right;
+    }
+    
+    .summary-section {
+        margin-top: 24px;
+        padding-top: 24px;
+        border-top: 2px solid #e5e7eb;
+    }
+    
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 14px;
+    }
+    
+    .summary-row.total {
+        font-size: 18px;
+        font-weight: 700;
+        color: #1a1a1a;
+        padding-top: 16px;
+        margin-top: 16px;
+        border-top: 2px solid #e5e7eb;
+    }
+    
+    .pay-button {
+        width: 100%;
+        padding: 16px;
+        background: #1a1a1a;
+        color: #ffffff;
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-top: 24px;
+        transition: all 0.2s ease;
+    }
+    
+    .pay-button:hover {
+        background: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    
+    .secure-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 16px;
+        font-size: 14px;
+        color: #6b7280;
+    }
+    
+    .secure-badge i {
+        color: #10b981;
+    }
+    
+    .payment-info {
+        background: #f0fdf4;
+        border: 1px solid #86efac;
+        border-radius: 8px;
+        padding: 16px;
+        margin-top: 16px;
+        font-size: 14px;
+        color: #166534;
+    }
+    
+    @media (max-width: 768px) {
+        .payment-wrapper {
+            grid-template-columns: 1fr;
+        }
+        
+        .payment-card {
+            position: relative;
+            top: 0;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="payment-container">
+    <div class="payment-wrapper">
+        <div class="order-summary-card">
+            <h2 class="card-title">Order Summary</h2>
+            
+            {% for item in order.items.all %}
+            <div class="order-item">
+                <div class="item-details">
+                    <div class="item-name">{{ item.product.name }}</div>
+                    <div class="item-variant">Quantity: {{ item.quantity }}</div>
+                </div>
+                <div class="item-price">₹{{ item.price|floatformat:2 }}</div>
+            </div>
+            {% endfor %}
+            
+            <div class="summary-section">
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span>₹{{ order.subtotal|floatformat:2 }}</span>
+                </div>
+                {% if order.discount_amount > 0 %}
+                <div class="summary-row">
+                    <span>Discount</span>
+                    <span style="color: #16a34a;">-₹{{ order.discount_amount|floatformat:2 }}</span>
+                </div>
+                {% endif %}
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>₹{{ order.shipping_cost|floatformat:2 }}</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Total</span>
+                    <span>₹{{ order.total_amount|floatformat:2 }}</span>
+                </div>
+            </div>
+        </div>
+        
+        <div class="payment-card">
+            <h2 class="card-title">Payment</h2>
+            
+            <!-- DEBUG INFO -->
+            <div style="background: #fff3cd; padding: 10px; margin-bottom: 15px; font-size: 12px; border-radius: 4px;">
+                <strong>Debug Info:</strong><br>
+                Razorpay Key: {{ razorpay_key_id }}<br>
+                Order ID: {{ razorpay_order_id }}<br>
+                Amount: {{ amount }}
+            </div>
+            
+            <form id="payment-form" method="POST" action="{% url 'payments:payment_callback' %}">
+                {% csrf_token %}
+                <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+                <input type="hidden" name="razorpay_order_id" id="razorpay_order_id" value="{{ razorpay_order_id }}">
+                <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+                
+                <button type="button" id="pay-button" class="pay-button">
+                    <i class="fas fa-lock"></i> Pay ₹{{ order.total_amount|floatformat:2 }}
+                </button>
+            </form>
+            
+            <div class="secure-badge">
+                <i class="fas fa-shield-alt"></i>
+                <span>Secure payment powered by Razorpay</span>
+            </div>
+            
+            <div class="payment-info">
+                <i class="fas fa-info-circle"></i>
+                Your payment information is encrypted and secure.
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    document.getElementById('pay-button').onclick = function(e) {
+        e.preventDefault();
+        
+        var razorpayKey = "{{ razorpay_key_id }}";
+        console.log("Razorpay Key ID:", razorpayKey);
+        console.log("Key length:", razorpayKey.length);
+        
+        var options = {
+            "key": razorpayKey,
+            "amount": "{{ amount }}",
+            "currency": "{{ currency }}",
+            "order_id": "{{ razorpay_order_id }}",
+            "name": "Abhirang",
+            "description": "Order #{{ order.order_number }}",
+            "handler": function (response) {
+                document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+                document.getElementById('razorpay_order_id').value = response.razorpay_order_id;
+                document.getElementById('razorpay_signature').value = response.razorpay_signature;
+                document.getElementById('payment-form').submit();
+            },
+            "prefill": {
+                "name": "{{ user_name }}",
+                "email": "{{ user_email }}",
+                "contact": "{{ user_phone }}"
+            },
+            "theme": {
+                "color": "#1a1a1a"
+            }
+        };
+        
+        console.log("Razorpay Options:", options);
+        
+        var rzp = new Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+            window.location.href = "{% url 'payments:payment_failed' order.order_number %}";
+        });
+        rzp.open();
+    };
+</script>
+{% endblock %}

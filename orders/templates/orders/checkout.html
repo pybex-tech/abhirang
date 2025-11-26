@@ -68,6 +68,7 @@
     }
     
     .address-card {
+        display: block;
         position: relative;
         padding: 20px;
         border: 2px solid #e5e7eb;
@@ -89,10 +90,13 @@
         position: absolute;
         top: 20px;
         right: 20px;
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
     }
     
     .address-content {
-        padding-right: 40px;
+        padding-right: 50px;
     }
     
     .address-name {
@@ -426,13 +430,15 @@
                         {% if addresses %}
                             <div class="address-list">
                                 {% for address in addresses %}
-                                <div class="address-card {% if address == default_address %}selected{% endif %}" 
-                                     onclick="selectAddress(this, {{ address.id }})">
+                                <label class="address-card {% if address == default_address %}selected{% endif %}" 
+                                       for="address_{{ address.id }}">
                                     <input type="radio" 
                                            name="address_id" 
                                            value="{{ address.id }}" 
+                                           id="address_{{ address.id }}"
                                            class="address-radio"
-                                           {% if address == default_address %}checked{% endif %}>
+                                           {% if address == default_address %}checked{% endif %}
+                                           onchange="selectAddressRadio(this)">
                                     <div class="address-content">
                                         <div class="address-name">
                                             {{ address.full_name }}
@@ -452,7 +458,7 @@
                                             <i class="fas fa-phone"></i> {{ address.phone }}
                                         </div>
                                     </div>
-                                </div>
+                                </label>
                                 {% endfor %}
                             </div>
                         {% else %}
@@ -561,17 +567,50 @@
 </div>
 
 <script>
-function selectAddress(card, addressId) {
+// Debug: Check form on load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Form loaded');
+    const radios = document.querySelectorAll('input[name="address_id"]');
+    console.log('Found radios:', radios.length);
+    radios.forEach(r => console.log('Radio:', r.value, 'Checked:', r.checked));
+    
+    // Ensure at least one radio is checked
+    const checkedRadio = document.querySelector('input[name="address_id"]:checked');
+    if (!checkedRadio && radios.length > 0) {
+        console.log('No radio checked, checking first one');
+        radios[0].checked = true;
+        radios[0].closest('.address-card').classList.add('selected');
+    }
+    
+    // Debug form submission
+    document.getElementById('checkout-form').addEventListener('submit', function(e) {
+        const formData = new FormData(this);
+        console.log('Form submitting with data:');
+        for (let pair of formData.entries()) {
+            console.log(pair[0], '=', pair[1]);
+        }
+        
+        // Double check address is selected
+        const selectedAddress = document.querySelector('input[name="address_id"]:checked');
+        if (!selectedAddress) {
+            e.preventDefault();
+            alert('Please select a delivery address');
+            console.error('No address selected!');
+            return false;
+        }
+        console.log('Selected address ID:', selectedAddress.value);
+    });
+});
+
+function selectAddressRadio(radio) {
+    console.log('Radio changed:', radio.value);
     // Remove selected class from all cards
     document.querySelectorAll('.address-card').forEach(c => {
         c.classList.remove('selected');
     });
     
-    // Add selected class to clicked card
-    card.classList.add('selected');
-    
-    // Check the radio button
-    card.querySelector('input[type="radio"]').checked = true;
+    // Add selected class to parent label
+    radio.closest('.address-card').classList.add('selected');
 }
 
 function applyCoupon() {
