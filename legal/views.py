@@ -1,6 +1,21 @@
 from django.shortcuts import render
 
 
+def contact_us(request):
+    """Contact Us page"""
+    return render(request, 'legal/contact_us.html')
+
+
+def faq(request):
+    """FAQ page"""
+    return render(request, 'legal/faq.html')
+
+
+def track_orders(request):
+    """Track Orders page"""
+    return render(request, 'legal/track_orders.html')
+
+
 def terms_of_service(request):
     """Terms of Service page"""
     return render(request, 'legal/terms_of_service.html')

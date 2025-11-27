@@ -1,0 +1,85 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Contact Us - Abhirang{% endblock %}
+
+{% block content %}
+<div style="max-width: 900px; margin: 0 auto; padding: 60px 20px;">
+    <h1 style="font-size: 36px; font-weight: 700; margin-bottom: 16px;">Contact Us</h1>
+    <p style="color: #6b7280; margin-bottom: 40px;">We'd love to hear from you!</p>
+    
+    <div style="line-height: 1.8; color: #374151;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 32px; margin-bottom: 48px;">
+            <div style="background: #f9fafb; border-radius: 12px; padding: 32px; border: 1px solid #e5e7eb;">
+                <div style="width: 48px; height: 48px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                    <i class="fas fa-envelope" style="color: white; font-size: 20px;"></i>
+                </div>
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">Email Us</h3>
+                <p style="color: #6b7280; margin-bottom: 12px;">For general inquiries and support</p>
+                <a href="mailto:support@abhirang.com" style="color: #1a1a1a; font-weight: 600;">support@abhirang.com</a>
+            </div>
+
+            <div style="background: #f9fafb; border-radius: 12px; padding: 32px; border: 1px solid #e5e7eb;">
+                <div style="width: 48px; height: 48px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                    <i class="fas fa-phone" style="color: white; font-size: 20px;"></i>
+                </div>
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">Call Us</h3>
+                <p style="color: #6b7280; margin-bottom: 12px;">Mon-Sat, 10 AM - 6 PM IST</p>
+                <a href="tel:+911234567890" style="color: #1a1a1a; font-weight: 600;">+91 123 456 7890</a>
+            </div>
+
+            <div style="background: #f9fafb; border-radius: 12px; padding: 32px; border: 1px solid #e5e7eb;">
+                <div style="width: 48px; height: 48px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
+                    <i class="fas fa-map-marker-alt" style="color: white; font-size: 20px;"></i>
+                </div>
+                <h3 style="font-size: 20px; font-weight: 600; margin-bottom: 8px;">Visit Us</h3>
+                <p style="color: #6b7280; margin-bottom: 12px;">Pybex Technology Private Limited</p>
+                <p style="color: #1a1a1a; font-weight: 600;">Bangalore, India</p>
+            </div>
+        </div>
+
+        <div style="background: #ffffff; border-radius: 12px; padding: 40px; border: 1px solid #e5e7eb;">
+            <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 24px;">Send Us a Message</h2>
+            <form method="post" style="display: grid; gap: 20px;">
+                {% csrf_token %}
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Name</label>
+                    <input type="text" name="name" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Email</label>
+                    <input type="email" name="email" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Subject</label>
+                    <input type="text" name="subject" required style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                </div>
+                <div>
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px;">Message</label>
+                    <textarea name="message" required rows="5" style="width: 100%; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; resize: vertical;"></textarea>
+                </div>
+                <button type="submit" style="background: #1a1a1a; color: white; padding: 14px 32px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; transition: all 0.2s;">
+                    Send Message
+                </button>
+            </form>
+        </div>
+
+        <div style="margin-top: 48px;">
+            <h2 style="font-size: 24px; font-weight: 600; margin-bottom: 16px;">Follow Us</h2>
+            <div style="display: flex; gap: 16px;">
+                <a href="#" style="width: 44px; height: 44px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="#" style="width: 44px; height: 44px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="#" style="width: 44px; height: 44px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="#" style="width: 44px; height: 44px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; text-decoration: none;">
+                    <i class="fab fa-youtube"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

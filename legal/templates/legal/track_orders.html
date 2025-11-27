@@ -1,0 +1,95 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Track Orders - Abhirang{% endblock %}
+
+{% block content %}
+<div style="max-width: 700px; margin: 0 auto; padding: 60px 20px;">
+    <h1 style="font-size: 36px; font-weight: 700; margin-bottom: 16px; text-align: center;">Track Your Order</h1>
+    <p style="color: #6b7280; margin-bottom: 40px; text-align: center;">Enter your order details to track your shipment</p>
+    
+    <div style="background: #ffffff; border-radius: 12px; padding: 40px; border: 1px solid #e5e7eb;">
+        <form method="get" action="{% url 'legal:track_orders' %}" style="display: grid; gap: 24px;">
+            <div>
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">
+                    <i class="fas fa-hashtag" style="margin-right: 8px;"></i>Order Number
+                </label>
+                <input 
+                    type="text" 
+                    name="order_number" 
+                    placeholder="e.g., ORD-20251127-12345678" 
+                    required 
+                    style="width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;"
+                >
+                <p style="font-size: 12px; color: #6b7280; margin-top: 6px;">
+                    You can find this in your order confirmation email
+                </p>
+            </div>
+
+            <div>
+                <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #374151;">
+                    <i class="fas fa-envelope" style="margin-right: 8px;"></i>Email Address
+                </label>
+                <input 
+                    type="email" 
+                    name="email" 
+                    placeholder="your.email@example.com" 
+                    required 
+                    style="width: 100%; padding: 14px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;"
+                >
+                <p style="font-size: 12px; color: #6b7280; margin-top: 6px;">
+                    The email address used during checkout
+                </p>
+            </div>
+
+            <button 
+                type="submit" 
+                style="background: #1a1a1a; color: white; padding: 16px; border: none; border-radius: 6px; font-weight: 600; font-size: 16px; cursor: pointer; transition: all 0.2s;"
+            >
+                <i class="fas fa-search" style="margin-right: 8px;"></i>Track Order
+            </button>
+        </form>
+
+        <div style="margin-top: 32px; padding-top: 32px; border-top: 1px solid #e5e7eb;">
+            <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px;">Alternative Tracking Methods</h3>
+            
+            <div style="display: grid; gap: 16px;">
+                <a href="{% if user.is_authenticated %}{% url 'accounts:profile' %}?tab=orders{% else %}{% url 'accounts:login' %}{% endif %}" 
+                   style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #f9fafb; border-radius: 6px; text-decoration: none; color: inherit; border: 1px solid #e5e7eb; transition: all 0.2s;">
+                    <div style="width: 40px; height: 40px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fas fa-user" style="color: white;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">Track via Account</div>
+                        <div style="font-size: 14px; color: #6b7280;">View all your orders in one place</div>
+                    </div>
+                    <i class="fas fa-arrow-right" style="margin-left: auto; color: #9ca3af;"></i>
+                </a>
+
+                <a href="{% url 'legal:contact_us' %}" 
+                   style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #f9fafb; border-radius: 6px; text-decoration: none; color: inherit; border: 1px solid #e5e7eb; transition: all 0.2s;">
+                    <div style="width: 40px; height: 40px; background: #1a1a1a; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                        <i class="fas fa-headset" style="color: white;"></i>
+                    </div>
+                    <div>
+                        <div style="font-weight: 600; margin-bottom: 4px;">Contact Support</div>
+                        <div style="font-size: 14px; color: #6b7280;">Need help? Our team is here for you</div>
+                    </div>
+                    <i class="fas fa-arrow-right" style="margin-left: auto; color: #9ca3af;"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 48px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 12px; padding: 24px;">
+        <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: #0c4a6e;">
+            <i class="fas fa-info-circle" style="margin-right: 8px;"></i>Tracking Information
+        </h3>
+        <ul style="color: #0c4a6e; font-size: 14px; line-height: 1.8; margin-left: 20px;">
+            <li>Tracking information is available once your order has been shipped</li>
+            <li>It may take 24-48 hours for tracking information to update after dispatch</li>
+            <li>You'll receive email and SMS notifications at each shipping milestone</li>
+            <li>For any concerns, please contact our support team</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}
