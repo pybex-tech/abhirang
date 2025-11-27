@@ -197,14 +197,6 @@
         <div class="payment-card">
             <h2 class="card-title">Payment</h2>
             
-            <!-- DEBUG INFO -->
-            <div style="background: #fff3cd; padding: 10px; margin-bottom: 15px; font-size: 12px; border-radius: 4px;">
-                <strong>Debug Info:</strong><br>
-                Razorpay Key: {{ razorpay_key_id }}<br>
-                Order ID: {{ razorpay_order_id }}<br>
-                Amount: {{ amount }}
-            </div>
-            
             <form id="payment-form" method="POST" action="{% url 'payments:payment_callback' %}">
                 {% csrf_token %}
                 <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
@@ -234,12 +226,8 @@
     document.getElementById('pay-button').onclick = function(e) {
         e.preventDefault();
         
-        var razorpayKey = "{{ razorpay_key_id }}";
-        console.log("Razorpay Key ID:", razorpayKey);
-        console.log("Key length:", razorpayKey.length);
-        
         var options = {
-            "key": razorpayKey,
+            "key": "{{ razorpay_key_id }}",
             "amount": "{{ amount }}",
             "currency": "{{ currency }}",
             "order_id": "{{ razorpay_order_id }}",
@@ -260,8 +248,6 @@
                 "color": "#1a1a1a"
             }
         };
-        
-        console.log("Razorpay Options:", options);
         
         var rzp = new Razorpay(options);
         rzp.on('payment.failed', function (response) {

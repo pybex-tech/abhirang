@@ -567,43 +567,29 @@
 </div>
 
 <script>
-// Debug: Check form on load
+// Ensure at least one radio is checked on page load
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Form loaded');
     const radios = document.querySelectorAll('input[name="address_id"]');
-    console.log('Found radios:', radios.length);
-    radios.forEach(r => console.log('Radio:', r.value, 'Checked:', r.checked));
     
     // Ensure at least one radio is checked
     const checkedRadio = document.querySelector('input[name="address_id"]:checked');
     if (!checkedRadio && radios.length > 0) {
-        console.log('No radio checked, checking first one');
         radios[0].checked = true;
         radios[0].closest('.address-card').classList.add('selected');
     }
     
-    // Debug form submission
+    // Form submission validation
     document.getElementById('checkout-form').addEventListener('submit', function(e) {
-        const formData = new FormData(this);
-        console.log('Form submitting with data:');
-        for (let pair of formData.entries()) {
-            console.log(pair[0], '=', pair[1]);
-        }
-        
-        // Double check address is selected
         const selectedAddress = document.querySelector('input[name="address_id"]:checked');
         if (!selectedAddress) {
             e.preventDefault();
             alert('Please select a delivery address');
-            console.error('No address selected!');
             return false;
         }
-        console.log('Selected address ID:', selectedAddress.value);
     });
 });
 
 function selectAddressRadio(radio) {
-    console.log('Radio changed:', radio.value);
     // Remove selected class from all cards
     document.querySelectorAll('.address-card').forEach(c => {
         c.classList.remove('selected');

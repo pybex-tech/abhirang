@@ -191,12 +191,6 @@ def place_order(request):
     """
     if request.method == 'POST':
         try:
-            # Debug logging
-            print("=" * 50)
-            print("PLACE ORDER CALLED")
-            print(f"POST data: {request.POST}")
-            print("=" * 50)
-            
             # Get cart
             cart = Cart.objects.get(user=request.user)
             cart_items = cart.items.all()
@@ -207,7 +201,6 @@ def place_order(request):
             
             # Get selected address
             address_id = request.POST.get('address_id')
-            print(f"Address ID from form: {address_id}")
             
             if not address_id:
                 messages.error(request, "Please select a delivery address")

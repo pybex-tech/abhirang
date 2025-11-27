@@ -59,11 +59,14 @@ def initiate_payment(request, order_number):
     context = {
         "order": order,
         "payment": payment,
-        "razorpay_key": settings.RAZORPAY_KEY_ID,
+        "razorpay_key_id": settings.RAZORPAY_KEY_ID,
         "razorpay_order_id": payment.razorpay_order_id,
         "amount": int(float(payment.amount) * 100),
         "currency": payment.currency,
         "callback_url": request.build_absolute_uri("/") + "payments/callback/",
+        "user_name": request.user.get_full_name() or request.user.username,
+        "user_email": request.user.email,
+        "user_phone": order.shipping_phone,
     }
     
     return render(request, "payments/payment_page.html", context)

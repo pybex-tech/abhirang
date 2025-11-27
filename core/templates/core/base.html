@@ -357,12 +357,12 @@
                     <ul>
                         <li><a href="#">Contact Us</a></li>
                         <li><a href="#">FAQ</a></li>
-                        <li><a href="#">T&C</a></li>
-                        <li><a href="#">Terms Of Use</a></li>
+                        <li><a href="{% url 'legal:terms_of_service' %}">Terms Of Service</a></li>
+                        <li><a href="{% url 'legal:privacy_policy' %}">Privacy Policy</a></li>
                         <li><a href="#">Track Orders</a></li>
-                        <li><a href="#">Shipping</a></li>
-                        <li><a href="#">Cancellation</a></li>
-                        <li><a href="#">Returns</a></li>
+                        <li><a href="{% url 'legal:shipping_policy' %}">Shipping Policy</a></li>
+                        <li><a href="{% url 'legal:cancellation_policy' %}">Cancellation Policy</a></li>
+                        <li><a href="{% url 'legal:refund_policy' %}">Refund & Returns</a></li>
                     </ul>
                 </div>
                 
@@ -389,7 +389,10 @@
             </div>
             
             <div class="footer-bottom">
-                <p>&copy; 2025 Abhirang. All rights reserved. Made with 💜 for T-shirt lovers</p>
+                <p>&copy; 2025 <strong>Pybex Technology Private Limited</strong>. All rights reserved.</p>
+                <p style="margin-top: 8px; font-size: 14px; color: #9ca3af;">
+                    <strong>Abhirang</strong> is a registered trademark of Pybex Technology Private Limited. Made with 💜 for T-shirt lovers
+                </p>
             </div>
         </div>
     </footer>
